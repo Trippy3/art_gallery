@@ -42,26 +42,12 @@ export function Header() {
                 className="text-sm text-muted-foreground hover:text-foreground transition-colors"
                 onClick={() => setIsMenuOpen(false)}
               >
-                作品
-              </a>
-              <a
-                href="#about"
-                className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                について
-              </a>
-              <a
-                href="#contact"
-                className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                お問い合わせ
+                私について
               </a>
 
               <div className="pt-4 mt-4 border-t border-border">
-                <p className="text-xs text-muted-foreground mb-3 font-medium">
-                  タイムライン
+                <p className="text-lg text-muted-foreground mb-3 font-medium">
+                  History
                 </p>
                 <div className="flex flex-col gap-3">
                   <button

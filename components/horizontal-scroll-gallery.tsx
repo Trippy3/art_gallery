@@ -135,7 +135,7 @@ export function HorizontalScrollGallery() {
         <div className="absolute top-24 left-4 sm:left-8 z-10">
           <div className="flex flex-col gap-2">
             <span className="text-xs text-muted-foreground font-mono">
-              タイムライン
+              History
             </span>
             <div className="w-32 h-1 bg-secondary rounded-full overflow-hidden">
               <div
@@ -185,7 +185,7 @@ export function HorizontalScrollGallery() {
 
                     <div className="flex flex-col items-center">
                       <div className="w-4 h-4 rounded-full bg-accent border-4 border-background shadow-lg" />
-                      <div className="mt-2 px-3 py-1 text-xs font-mono font-medium bg-accent/10 text-accent-foreground rounded-full">
+                      <div className="mt-2 px-3 py-1 text-xs font-mono font-medium bg-accent text-accent-foreground rounded-full">
                         {artwork.year}
                       </div>
                     </div>

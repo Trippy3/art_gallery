@@ -42,6 +42,9 @@ export function Footer() {
             <h3 className="text-lg font-semibold mb-4">リンク</h3>
             <ul className="space-y-2 text-sm text-muted-foreground">
               <li>
+                <a href="https://">私について</a>
+              </li>
+              <li>
                 <a
                   href="https://github.com/Trippy3/art_gallery"
                   className="hover:text-foreground transition-colors"

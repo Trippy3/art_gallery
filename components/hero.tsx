@@ -1,6 +1,6 @@
 export function Hero() {
   return (
-    <section className="pt-32 pb-16 px-4 sm:px-6 lg:px-8">
+    <section className="pt-32 pb-32 px-4 sm:px-6 lg:px-8">
       <div className="container mx-auto max-w-4xl">
         <p className="text-sm text-muted-foreground mb-4">ようこそ！</p>
         <h2 className="text-3xl sm:text-4xl lg:text-5xl font-light text-foreground mb-6 leading-relaxed text-balance">
