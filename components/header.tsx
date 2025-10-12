@@ -1,29 +1,35 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Menu, X } from "lucide-react"
+import { useState } from "react";
+import { Menu, X } from "lucide-react";
 
 export function Header() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const scrollToYear = (year: number) => {
-    const element = document.getElementById(`year-${year}`)
+    const element = document.getElementById(`year-${year}`);
     if (element) {
-      element.scrollIntoView({ behavior: "smooth", block: "center" })
-      setIsMenuOpen(false)
+      element.scrollIntoView({ behavior: "smooth", block: "center" });
+      setIsMenuOpen(false);
     }
-  }
+  };
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-sm border-b border-border">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <div className="flex-shrink-0">
-            <h1 className="text-lg font-medium text-foreground">アートポートフォリオ</h1>
+            <h1 className="text-lg font-medium text-foreground">
+              Aviary's Art Gallery
+            </h1>
           </div>
 
           {/* Menu Button - now visible on all screen sizes */}
-          <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="p-2 text-foreground" aria-label="メニュー">
+          <button
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            className="p-2 text-foreground"
+            aria-label="メニュー"
+          >
             {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
         </div>
@@ -54,7 +60,9 @@ export function Header() {
               </a>
 
               <div className="pt-4 mt-4 border-t border-border">
-                <p className="text-xs text-muted-foreground mb-3 font-medium">タイムライン</p>
+                <p className="text-xs text-muted-foreground mb-3 font-medium">
+                  タイムライン
+                </p>
                 <div className="flex flex-col gap-3">
                   <button
                     onClick={() => scrollToYear(2024)}
@@ -87,5 +95,5 @@ export function Header() {
         )}
       </div>
     </header>
-  )
+  );
 }
