@@ -1,32 +1,39 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import Image from "next/image"
-import Link from "next/link"
-import { Card } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { ExternalLink } from "lucide-react"
+import { useState } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { ExternalLink } from "lucide-react";
 
 interface Artwork {
-  id: number
-  title: string
-  year: string
-  description: string
-  image: string
-  tags: string[]
+  id: number;
+  title: string;
+  year: string;
+  description: string;
+  image: string;
+  tags: string[];
 }
 
 interface ArtworkCardProps {
-  artwork: Artwork
-  index: number
-  scrollProgress: number
+  artwork: Artwork;
+  index: number;
+  scrollProgress: number;
 }
 
-export function ArtworkCard({ artwork, index, scrollProgress }: ArtworkCardProps) {
-  const [isHovered, setIsHovered] = useState(false)
+export function ArtworkCard({
+  artwork,
+  index,
+  scrollProgress,
+}: ArtworkCardProps) {
+  const [isHovered, setIsHovered] = useState(false);
 
   // Calculate individual card progress for staggered animations
-  const cardProgress = Math.max(0, Math.min(1, scrollProgress * 8 - index * 0.8))
+  const cardProgress = Math.max(
+    0,
+    Math.min(1, scrollProgress * 8 - index * 0.8),
+  );
 
   return (
     <Card
@@ -60,13 +67,10 @@ export function ArtworkCard({ artwork, index, scrollProgress }: ArtworkCardProps
             isHovered ? "translate-y-0" : "translate-y-4 md:translate-y-0"
           }`}
         >
-          {/* Year badge */}
-          <div className="inline-block px-3 py-1 mb-3 text-xs font-mono bg-accent text-accent-foreground rounded-full">
-            {artwork.year}
-          </div>
-
           {/* Title */}
-          <h3 className="text-xl sm:text-2xl font-medium text-foreground mb-2 text-balance">{artwork.title}</h3>
+          <h3 className="text-xl sm:text-2xl font-medium text-foreground mb-2 text-balance">
+            {artwork.title}
+          </h3>
 
           {/* Description */}
           <p
@@ -84,14 +88,21 @@ export function ArtworkCard({ artwork, index, scrollProgress }: ArtworkCardProps
             }`}
           >
             {artwork.tags.map((tag) => (
-              <span key={tag} className="text-xs px-2 py-1 bg-secondary text-secondary-foreground rounded">
+              <span
+                key={tag}
+                className="text-xs px-2 py-1 bg-secondary text-secondary-foreground rounded"
+              >
                 {tag}
               </span>
             ))}
           </div>
 
           {/* View Details button */}
-          <Link href={`/artwork/${artwork.id}`} target="_blank" rel="noopener noreferrer">
+          <Link
+            href={`/artwork/${artwork.id}`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             <Button
               variant="outline"
               size="sm"
@@ -104,5 +115,5 @@ export function ArtworkCard({ artwork, index, scrollProgress }: ArtworkCardProps
         </div>
       </div>
     </Card>
-  )
+  );
 }
