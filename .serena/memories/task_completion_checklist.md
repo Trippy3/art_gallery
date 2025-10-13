@@ -4,9 +4,9 @@
 
 ### 1. Code Quality (Optional)
 While the project has relaxed build checks, you may optionally run:
-```bash
+\`\`\`bash
 pnpm lint
-```
+\`\`\`
 
 **Note**: The project configuration (`next.config.mjs`) has:
 - `eslint.ignoreDuringBuilds: true`
@@ -15,20 +15,20 @@ pnpm lint
 This means builds will succeed even with linting or TypeScript errors. Manual linting is optional.
 
 ### 2. Local Testing
-```bash
+\`\`\`bash
 # Test in development mode
 pnpm dev
 # Visit http://localhost:3000 to verify changes
-```
+\`\`\`
 
 ### 3. Build Verification
-```bash
+\`\`\`bash
 # Verify production build works
 pnpm build
 
 # Test production server
 pnpm start
-```
+\`\`\`
 
 ### 4. Component-Specific Checks
 
@@ -58,7 +58,7 @@ pnpm start
 - **Artwork Data**: Check artwork array structure in `horizontal-scroll-gallery.tsx`
 
 ### 7. Git Workflow (Standard)
-```bash
+\`\`\`bash
 # Check status
 git status
 
@@ -70,7 +70,7 @@ git commit -m "Descriptive commit message"
 
 # Push to remote (if needed)
 git push
-```
+\`\`\`
 
 ## Testing Priorities
 

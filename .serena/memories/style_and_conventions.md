@@ -26,7 +26,7 @@
 - **Shadcn Colors**: Includes semantic colors (background, foreground, primary, secondary, muted, accent, destructive, border, input, ring, chart-1 through chart-5)
 
 ### Component Styling Pattern
-```typescript
+\`\`\`typescript
 // Use cn() utility for conditional classes
 import { cn } from "@/lib/utils"
 
@@ -34,7 +34,7 @@ import { cn } from "@/lib/utils"
   "base-classes",
   condition && "conditional-classes"
 )} />
-```
+\`\`\`
 
 ## Component Patterns
 

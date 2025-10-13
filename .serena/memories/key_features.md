@@ -19,7 +19,7 @@ The core feature of this application is a horizontal-scrolling timeline implemen
 
 ### Data Structure
 Artworks are stored in an array within `horizontal-scroll-gallery.tsx`:
-```typescript
+\`\`\`typescript
 {
   id: number,
   title: string,        // Japanese
@@ -28,7 +28,7 @@ Artworks are stored in an array within `horizontal-scroll-gallery.tsx`:
   image: string,        // Path to /public
   tags: string[]       // Japanese tags
 }
-```
+\`\`\`
 
 ## Theme System
 

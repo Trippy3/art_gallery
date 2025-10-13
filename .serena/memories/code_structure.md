@@ -2,7 +2,7 @@
 
 ## Directory Layout
 
-```
+\`\`\`
 art_gallery/
 ├── app/
 │   ├── layout.tsx          # Root layout with theme provider and metadata
@@ -26,7 +26,7 @@ art_gallery/
 ├── next.config.mjs         # Next.js configuration
 ├── components.json         # shadcn/ui configuration
 └── CLAUDE.md               # Project documentation for Claude Code
-```
+\`\`\`
 
 ## Key Components
 
@@ -51,15 +51,15 @@ art_gallery/
 
 ## Path Aliases
 All imports use `@/` alias pointing to the project root:
-```typescript
+\`\`\`typescript
 import { Component } from "@/components/component"
-```
+\`\`\`
 
 Configured in `tsconfig.json`:
-```json
+\`\`\`json
 {
   "paths": {
     "@/*": ["./*"]
   }
 }
-```
+\`\`\`

@@ -8,7 +8,7 @@ This is a Next.js 15 portfolio/art gallery application auto-synced with v0.app d
 
 ## Development Commands
 
-```bash
+\`\`\`bash
 # Install dependencies (uses pnpm)
 pnpm install
 
@@ -23,7 +23,7 @@ pnpm start
 
 # Run linting
 pnpm lint
-```
+\`\`\`
 
 ## Technology Stack
 
@@ -36,7 +36,7 @@ pnpm lint
 
 ## Project Structure
 
-```
+\`\`\`
 app/
   ├── layout.tsx          # Root layout with theme provider
   ├── page.tsx            # Main page composing all sections
@@ -53,15 +53,15 @@ components/
 
 lib/                      # Utility functions (e.g., cn helper)
 public/                   # Static assets (images)
-```
+\`\`\`
 
 ## Architecture Patterns
 
 ### Path Aliases
 The project uses `@/` alias for all imports, configured in `tsconfig.json`:
-```typescript
+\`\`\`typescript
 import { Component } from "@/components/component"
-```
+\`\`\`
 
 ### Component Organization
 - **Layout components**: `header.tsx`, `footer.tsx` - Static UI elements
