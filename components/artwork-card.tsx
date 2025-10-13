@@ -2,7 +2,10 @@
 
 import { useState } from "react"
 import Image from "next/image"
+import Link from "next/link"
 import { Card } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { ExternalLink } from "lucide-react"
 
 interface Artwork {
   id: number
@@ -76,7 +79,7 @@ export function ArtworkCard({ artwork, index, scrollProgress }: ArtworkCardProps
 
           {/* Tags */}
           <div
-            className={`flex flex-wrap gap-2 transition-opacity duration-500 ${
+            className={`flex flex-wrap gap-2 mb-4 transition-opacity duration-500 ${
               isHovered ? "opacity-100" : "opacity-0 md:opacity-100"
             }`}
           >
@@ -86,6 +89,18 @@ export function ArtworkCard({ artwork, index, scrollProgress }: ArtworkCardProps
               </span>
             ))}
           </div>
+
+          {/* View Details button */}
+          <Link href={`/artwork/${artwork.id}`} target="_blank" rel="noopener noreferrer">
+            <Button
+              variant="outline"
+              size="sm"
+              className={`transition-opacity duration-500 ${isHovered ? "opacity-100" : "opacity-0 md:opacity-100"}`}
+            >
+              詳細を見る
+              <ExternalLink className="ml-2 h-4 w-4" />
+            </Button>
+          </Link>
         </div>
       </div>
     </Card>
