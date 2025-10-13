@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { Menu, X } from "lucide-react"
+import Link from "next/link"
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -23,11 +24,11 @@ export function Header() {
     <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-sm border-b border-border">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          <button onClick={scrollToTop} className="flex-shrink-0">
+          <Link href="/" className="flex-shrink-0">
             <h1 className="text-lg font-medium text-foreground hover:text-foreground/80 transition-colors">
               Aviary's Art Gallery
             </h1>
-          </button>
+          </Link>
 
           {/* Menu Button - now visible on all screen sizes */}
           <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="p-2 text-foreground" aria-label="メニュー">
@@ -38,13 +39,13 @@ export function Header() {
         {isMenuOpen && (
           <nav className="py-4 border-t border-border">
             <div className="flex flex-col gap-4">
-              <a
-                href="#work"
+              <Link
+                href="/about_me"
                 className="text-sm text-muted-foreground hover:text-foreground transition-colors"
                 onClick={() => setIsMenuOpen(false)}
               >
                 私について
-              </a>
+              </Link>
 
               <div className="pt-4 mt-4 border-t border-border">
                 <p className="text-lg text-muted-foreground mb-3 font-medium">History</p>

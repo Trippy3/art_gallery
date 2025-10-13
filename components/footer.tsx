@@ -1,3 +1,5 @@
+import Link from "next/link"
+
 export function Footer() {
   return (
     <footer className="bg-background border-t border-border">
@@ -42,7 +44,9 @@ export function Footer() {
             <h3 className="text-lg font-semibold mb-4">リンク</h3>
             <ul className="space-y-2 text-sm text-muted-foreground">
               <li>
-                <a href="https://">私について</a>
+                <Link href="/about_me" className="hover:text-foreground transition-colors">
+                  私について
+                </Link>
               </li>
               <li>
                 <a
@@ -59,11 +63,9 @@ export function Footer() {
         </div>
 
         <div className="mt-8 pt-8 border-t border-border text-center text-sm text-muted-foreground">
-          <p>
-            &copy; {new Date().getFullYear()} hiro-torii. All rights reserved.
-          </p>
+          <p>&copy; {new Date().getFullYear()} hiro-torii. All rights reserved.</p>
         </div>
       </div>
     </footer>
-  );
+  )
 }
