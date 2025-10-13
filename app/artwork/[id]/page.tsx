@@ -103,8 +103,9 @@ const artworks = [
   },
 ]
 
-export default function ArtworkDetailPage({ params }: { params: { id: string } }) {
-  const artwork = artworks.find((a) => a.id === Number.parseInt(params.id))
+export default async function ArtworkDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
+  const artwork = artworks.find((a) => a.id === Number.parseInt(id))
 
   if (!artwork) {
     notFound()
