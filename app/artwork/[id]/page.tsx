@@ -1,9 +1,9 @@
-import Image from "next/image"
-import Link from "next/link"
-import { notFound } from "next/navigation"
-import { Button } from "@/components/ui/button"
-import { Footer } from "@/components/footer"
-import { ArrowLeft } from "lucide-react"
+import Image from "next/image";
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { Footer } from "@/components/footer";
+import { ArrowLeft } from "lucide-react";
 
 const artworks = [
   {
@@ -93,23 +93,27 @@ const artworks = [
   {
     id: 8,
     title: "ミニマルスペース",
-    year: "2024",
+    year: "2025",
     description: "ミニマリズムの美学",
-    image: "/minimal-space-contemporary-art.jpg",
+    image: "/2025-08_Spring_Portrait_of_Ilona_Lippich_P15.jpg",
     tags: ["ミニマル", "空間", "シンプル"],
     fullDescription:
       "ミニマリズムの哲学に基づき、余白と要素の配置を慎重に考慮した作品です。少ない要素で最大限の表現を目指し、シンプルさの中に深い意味を込めています。静寂と調和を感じられる空間を創出しました。",
     medium: "デジタルアート",
     dimensions: "3000 x 3000 px",
   },
-]
+];
 
-export default async function ArtworkDetailPage({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = await params
-  const artwork = artworks.find((a) => a.id === Number.parseInt(id))
+export default async function ArtworkDetailPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
+  const artwork = artworks.find((a) => a.id === Number.parseInt(id));
 
   if (!artwork) {
-    notFound()
+    notFound();
   }
 
   return (
@@ -135,7 +139,12 @@ export default async function ArtworkDetailPage({ params }: { params: Promise<{ 
             <div className="grid md:grid-cols-2 gap-8 lg:gap-12">
               {/* Image */}
               <div className="relative aspect-[3/4] rounded-lg overflow-hidden bg-secondary">
-                <Image src={artwork.image || "/placeholder.svg"} alt={artwork.title} fill className="object-cover" />
+                <Image
+                  src={artwork.image || "/placeholder.svg"}
+                  alt={artwork.title}
+                  fill
+                  className="object-cover"
+                />
               </div>
 
               {/* Details */}
@@ -146,42 +155,63 @@ export default async function ArtworkDetailPage({ params }: { params: Promise<{ 
                 </div>
 
                 {/* Title */}
-                <h1 className="text-4xl sm:text-5xl font-medium text-foreground text-balance">{artwork.title}</h1>
+                <h1 className="text-4xl sm:text-5xl font-medium text-foreground text-balance">
+                  {artwork.title}
+                </h1>
 
                 {/* Short description */}
-                <p className="text-lg text-muted-foreground leading-relaxed">{artwork.description}</p>
+                <p className="text-lg text-muted-foreground leading-relaxed">
+                  {artwork.description}
+                </p>
 
                 {/* Full description */}
                 <div className="pt-4 border-t border-border">
-                  <h2 className="text-sm font-medium text-foreground mb-3">作品について</h2>
-                  <p className="text-sm text-muted-foreground leading-relaxed">{artwork.fullDescription}</p>
+                  <h2 className="text-sm font-medium text-foreground mb-3">
+                    作品について
+                  </h2>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    {artwork.fullDescription}
+                  </p>
                 </div>
 
                 {/* Specifications */}
                 <div className="pt-4 border-t border-border space-y-3">
-                  <h2 className="text-sm font-medium text-foreground mb-3">作品情報</h2>
+                  <h2 className="text-sm font-medium text-foreground mb-3">
+                    作品情報
+                  </h2>
                   <div className="grid grid-cols-2 gap-4 text-sm">
                     <div>
                       <p className="text-muted-foreground mb-1">制作年</p>
-                      <p className="text-foreground font-medium">{artwork.year}</p>
+                      <p className="text-foreground font-medium">
+                        {artwork.year}
+                      </p>
                     </div>
                     <div>
                       <p className="text-muted-foreground mb-1">メディウム</p>
-                      <p className="text-foreground font-medium">{artwork.medium}</p>
+                      <p className="text-foreground font-medium">
+                        {artwork.medium}
+                      </p>
                     </div>
                     <div className="col-span-2">
                       <p className="text-muted-foreground mb-1">サイズ</p>
-                      <p className="text-foreground font-medium">{artwork.dimensions}</p>
+                      <p className="text-foreground font-medium">
+                        {artwork.dimensions}
+                      </p>
                     </div>
                   </div>
                 </div>
 
                 {/* Tags */}
                 <div className="pt-4 border-t border-border">
-                  <h2 className="text-sm font-medium text-foreground mb-3">タグ</h2>
+                  <h2 className="text-sm font-medium text-foreground mb-3">
+                    タグ
+                  </h2>
                   <div className="flex flex-wrap gap-2">
                     {artwork.tags.map((tag) => (
-                      <span key={tag} className="text-xs px-3 py-1 bg-secondary text-secondary-foreground rounded-full">
+                      <span
+                        key={tag}
+                        className="text-xs px-3 py-1 bg-secondary text-secondary-foreground rounded-full"
+                      >
                         {tag}
                       </span>
                     ))}
@@ -194,5 +224,5 @@ export default async function ArtworkDetailPage({ params }: { params: Promise<{ 
       </main>
       <Footer />
     </>
-  )
+  );
 }
