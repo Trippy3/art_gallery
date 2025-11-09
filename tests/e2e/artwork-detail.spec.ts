@@ -410,6 +410,7 @@ test.describe('Artwork Detail Page', () => {
         { id: 3, year: '2022' },
         { id: 5, year: '2023' },
         { id: 7, year: '2024' },
+        { id: 8, year: '2025' },
       ]
 
       for (const artwork of testArtworks) {

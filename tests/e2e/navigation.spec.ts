@@ -77,12 +77,12 @@ test.describe('Navigation', () => {
       await expect(historyLabel).toBeVisible()
     })
 
-    test('should display all year buttons (2024-2021)', async ({ page }) => {
+    test('should display all year buttons (2025-2021)', async ({ page }) => {
       const menuButton = page.locator(selectors.menuButton)
       await menuButton.click()
 
       // Check for all year buttons
-      const years = ['2024年', '2023年', '2022年', '2021年']
+      const years = ['2025年', '2024年', '2023年', '2022年', '2021年']
       for (const year of years) {
         const yearButton = page.locator(`text=${year}`)
         await expect(yearButton).toBeVisible()
@@ -122,6 +122,21 @@ test.describe('Navigation', () => {
   })
 
   test.describe('Year Navigation - Smooth Scroll', () => {
+    test('should scroll to 2025 section', async ({ page }) => {
+      const menuButton = page.locator(selectors.menuButton)
+      await menuButton.click()
+
+      const year2025Button = page.locator(selectors.year2025Link)
+      await year2025Button.click()
+
+      // Wait for smooth scroll
+      await page.waitForTimeout(1500)
+
+      // Check if year-2025 marker is in viewport
+      const yearMarker = page.locator('[id="year-2025"]').first()
+      await expect(yearMarker).toBeInViewport()
+    })
+
     test('should scroll to 2024 section', async ({ page }) => {
       const menuButton = page.locator(selectors.menuButton)
       await menuButton.click()

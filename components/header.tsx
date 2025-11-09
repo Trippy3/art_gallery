@@ -51,6 +51,12 @@ export function Header() {
                 <p className="text-lg text-muted-foreground mb-3 font-medium">History</p>
                 <div className="flex flex-col gap-3">
                   <button
+                    onClick={() => scrollToYear(2025)}
+                    className="text-sm text-muted-foreground hover:text-foreground transition-colors text-left"
+                  >
+                    2025年
+                  </button>
+                  <button
                     onClick={() => scrollToYear(2024)}
                     className="text-sm text-muted-foreground hover:text-foreground transition-colors text-left"
                   >

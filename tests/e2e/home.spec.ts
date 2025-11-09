@@ -102,9 +102,9 @@ test.describe('Home Page', () => {
     })
 
     test('should display year markers on timeline', async ({ page }) => {
-      // Check for year markers: 2021, 2022, 2023, 2024
+      // Check for year markers: 2021, 2022, 2023, 2024, 2025
       // Note: There are duplicate IDs (one for each artwork in that year)
-      const years = ['2021', '2022', '2023', '2024']
+      const years = ['2021', '2022', '2023', '2024', '2025']
 
       for (const year of years) {
         const yearMarker = page.locator(`[id="year-${year}"]`).first()
@@ -413,7 +413,7 @@ test.describe('Home Page', () => {
         await expect(yearMarker).toBeAttached()
       }
 
-      expect(uniqueYears.length).toBe(4) // 2021, 2022, 2023, 2024
+      expect(uniqueYears.length).toBe(5) // 2021, 2022, 2023, 2024, 2025
     })
   })
 })

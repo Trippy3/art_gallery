@@ -2,73 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { ArtworkCard } from "./artwork-card";
-
-const artworks = [
-  {
-    id: 1,
-    title: "デジタルランドスケープ",
-    year: "2021",
-    description: "抽象的な風景をデジタルで表現",
-    image: "/abstract-digital-landscape-art.jpg",
-    tags: ["デジタル", "風景", "抽象"],
-  },
-  {
-    id: 2,
-    title: "アーバンリズム",
-    year: "2021",
-    description: "都市の鼓動を視覚化",
-    image: "/urban-rhythm-geometric-art.jpg",
-    tags: ["都市", "幾何学", "リズム"],
-  },
-  {
-    id: 3,
-    title: "オーガニックフォーム",
-    year: "2022",
-    description: "自然の形態からインスピレーション",
-    image: "/organic-forms-nature-inspired-art.jpg",
-    tags: ["自然", "有機的", "フォーム"],
-  },
-  {
-    id: 4,
-    title: "カラーハーモニー",
-    year: "2022",
-    description: "色彩の調和を探求",
-    image: "/color-harmony-abstract-art.jpg",
-    tags: ["色彩", "調和", "抽象"],
-  },
-  {
-    id: 5,
-    title: "テクスチャーレイヤー",
-    year: "2023",
-    description: "質感の重なりを表現",
-    image: "/texture-layers-mixed-media-art.jpg",
-    tags: ["テクスチャ", "レイヤー", "ミックス"],
-  },
-  {
-    id: 6,
-    title: "ライトアンドシャドウ",
-    year: "2023",
-    description: "光と影の対比",
-    image: "/light-and-shadow-contrast-art.jpg",
-    tags: ["光", "影", "対比"],
-  },
-  {
-    id: 7,
-    title: "フルイドモーション",
-    year: "2024",
-    description: "流動的な動きを捉える",
-    image: "/fluid-motion-abstract-art.jpg",
-    tags: ["流動", "動き", "ダイナミック"],
-  },
-  {
-    id: 8,
-    title: "ミニマルスペース",
-    year: "2025",
-    description: "ミニマリズムの美学",
-    image: "/2025-08_Spring_Portrait_of_Ilona_Lippich_P15.jpg",
-    tags: ["ミニマル", "空間", "シンプル"],
-  },
-];
+import { artworks } from "@/lib/data/artworks";
 
 export function HorizontalScrollGallery() {
   const containerRef = useRef<HTMLDivElement>(null);

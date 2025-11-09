@@ -6,15 +6,7 @@ import Link from "next/link";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ExternalLink } from "lucide-react";
-
-interface Artwork {
-  id: number;
-  title: string;
-  year: string;
-  description: string;
-  image: string;
-  tags: string[];
-}
+import { Artwork } from "@/lib/data/artworks";
 
 interface ArtworkCardProps {
   artwork: Artwork;
