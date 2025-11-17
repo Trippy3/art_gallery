@@ -1,110 +1,159 @@
 export interface Artwork {
-  id: number
-  title: string
-  year: string
-  description: string
-  image: string
-  tags: string[]
-  fullDescription: string
-  medium: string
-  dimensions: string
+  id: number;
+  title: string;
+  year: string;
+  description: string;
+  image: string;
+  tags: string[];
+  fullDescription: string;
+  medium: string;
+  dimensions: string;
 }
 
 export const artworks: Artwork[] = [
   {
     id: 1,
-    title: "デジタルランドスケープ",
-    year: "2021",
-    description: "抽象的な風景をデジタルで表現",
-    image: "/abstract-digital-landscape-art.jpg",
-    tags: ["デジタル", "風景", "抽象"],
+    title: "静物1",
+    year: "2022-10",
+    description: "りんごと洋梨とレンガブロック",
+    image: "/2022-10_F6.jpg",
+    tags: ["静物"],
     fullDescription:
-      "このデジタルアート作品は、自然の風景を抽象的な形で再解釈したものです。色彩の層を重ねることで、見る者に深い感情的な体験を提供します。デジタルツールを使用することで、従来の絵画では表現できない独特の質感と光の効果を実現しました。",
-    medium: "デジタルアート",
-    dimensions: "3000 x 2000 px",
+      "油彩に初めて挑戦したときの作品です。下地はローアンバーで処理し、仕上げにコーパルペインティングオイルでツヤを付けています。",
+    medium: "油彩／カンヴァス",
+    dimensions: "F6",
   },
   {
     id: 2,
-    title: "アーバンリズム",
-    year: "2021",
-    description: "都市の鼓動を視覚化",
-    image: "/urban-rhythm-geometric-art.jpg",
-    tags: ["都市", "幾何学", "リズム"],
+    title: "静物2",
+    year: "2023-02",
+    description: "パンとぶどうとワイングラス",
+    image: "/2023-02_F6.jpg",
+    tags: ["静物"],
     fullDescription:
-      "都市の持つエネルギーとリズムを幾何学的なパターンで表現した作品です。建築物の直線と曲線、光と影のコントラストが織りなす都市の美しさを捉えています。現代都市の複雑さと秩序を同時に感じられる構成になっています。",
-    medium: "デジタルアート",
-    dimensions: "2500 x 3500 px",
+      "下地はウルトラマリンで処理し、仕上げにコーパルペインティングオイルでツヤを付けています。",
+    medium: "油彩／カンヴァス",
+    dimensions: "F6",
   },
   {
     id: 3,
-    title: "オーガニックフォーム",
-    year: "2022",
-    description: "自然の形態からインスピレーション",
-    image: "/organic-forms-nature-inspired-art.jpg",
-    tags: ["自然", "有機的", "フォーム"],
+    title: "都庁",
+    year: "2023-07",
+    description: "南西方向から見た都庁",
+    image: "/2023-07_F6.jpg",
+    tags: ["風景", "夕方"],
     fullDescription:
-      "自然界に存在する有機的な形態からインスピレーションを得た作品です。植物の成長パターンや水の流れなど、自然の持つ美しい曲線を抽象化して表現しています。柔らかな色彩と流動的なフォルムが調和した作品です。",
-    medium: "ミックスメディア",
-    dimensions: "4000 x 3000 px",
+      "風景に挑戦したくなり身近な都庁を選択しました。下地はローアンバーで処理し、仕上げにコーパルペインティングオイルでツヤを付けています。",
+    medium: "油彩／カンヴァス",
+    dimensions: "F6",
   },
   {
     id: 4,
-    title: "カラーハーモニー",
-    year: "2022",
-    description: "色彩の調和を探求",
-    image: "/color-harmony-abstract-art.jpg",
-    tags: ["色彩", "調和", "抽象"],
+    title: "新宿",
+    year: "2023-10",
+    description: "歩道橋から見た新宿の夜景",
+    image: "/2023-10_F8.jpg",
+    tags: ["風景", "夜景"],
     fullDescription:
-      "色彩理論に基づいた調和のとれた配色を探求した抽象作品です。補色や類似色の関係性を視覚的に表現し、見る者に心地よい視覚体験を提供します。色彩が持つ感情的な力を最大限に引き出すことを目指しました。",
-    medium: "デジタルアート",
-    dimensions: "3500 x 2500 px",
+      "夜景に挑戦したくなり、西から東へ移動する際に見かける景色を選択しました。下地は紫系の色を使い、マットペインティングオイルを使いツヤが出ない画面に挑戦しました。",
+    medium: "油彩／カンヴァス",
+    dimensions: "F8",
   },
   {
     id: 5,
-    title: "テクスチャーレイヤー",
-    year: "2023",
-    description: "質感の重なりを表現",
-    image: "/texture-layers-mixed-media-art.jpg",
-    tags: ["テクスチャ", "レイヤー", "ミックス"],
+    title: "模写『スミレ色のチュニックを着た少女』",
+    year: "2024-03",
+    description:
+      "ジャン=バティスト・グルーズ作『スミレ色のチュニックを着た少女』の模写",
+    image: "/2024-03_F6.jpg",
+    tags: ["模写", "人物", "肖像"],
     fullDescription:
-      "異なる質感を持つ素材を重ね合わせることで、深みのある視覚体験を創出した作品です。デジタルとアナログの技法を組み合わせ、触覚的な要素を視覚的に表現しています。層の重なりが生み出す複雑な表情が特徴です。",
-    medium: "ミックスメディア",
-    dimensions: "3000 x 4000 px",
+      "人物画に挑戦したくなり、難易度を考慮してグルーズの本作を模写することにしました。",
+    medium: "油彩／カンヴァス",
+    dimensions: "F6",
   },
   {
     id: 6,
-    title: "ライトアンドシャドウ",
-    year: "2023",
-    description: "光と影の対比",
-    image: "/light-and-shadow-contrast-art.jpg",
-    tags: ["光", "影", "対比"],
+    title:
+      "模写『エカチェリーナ・ヴァシリエヴナ・スカヴロンスキー伯爵夫人の肖像』",
+    year: "2024-05",
+    description: "エリザベート・ルイーズ・ヴィジェ・ル・ブラン作の模写",
+    image: "/2024-05_Le_Brun_F8.jpg",
+    tags: ["模写", "人物", "肖像"],
     fullDescription:
-      "光と影の劇的な対比を通じて、空間の深さと立体感を表現した作品です。明暗のコントラストが生み出すドラマチックな効果により、見る者の視線を引き込みます。光の持つ力強さと影の持つ神秘性を同時に感じられる構成です。",
-    medium: "デジタルアート",
-    dimensions: "2800 x 3800 px",
+      "ルブランの作品の模写に挑戦しました。本作から下地にジェッソを塗り始めました。",
+    medium: "油彩／カンヴァス",
+    dimensions: "F8",
   },
   {
     id: 7,
-    title: "フルイドモーション",
-    year: "2024",
-    description: "流動的な動きを捉える",
-    image: "/fluid-motion-abstract-art.jpg",
-    tags: ["流動", "動き", "ダイナミック"],
+    title: "模写『ラ・シャトル伯爵夫人』",
+    year: "2024-11",
+    description: "エリザベート・ルイーズ・ヴィジェ・ル・ブラン作の模写",
+    image: "/2024-11_Le_Brun_F10.jpg",
+    tags: ["模写", "人物", "肖像"],
     fullDescription:
-      "流体の動きをデジタルで再現し、その美しさと力強さを表現した作品です。水や空気の流れが持つ自然な美しさを、鮮やかな色彩とダイナミックな構図で捉えています。静止画でありながら動きを感じさせる表現を追求しました。",
-    medium: "デジタルアート",
-    dimensions: "4500 x 3000 px",
+      "前作に続きルブランの作品の模写になります。3層程度ジェッソを塗ってから、やすりで削り下地の層で引っかからないよう工夫をしました。",
+    medium: "油彩／カンヴァス",
+    dimensions: "F10",
   },
   {
     id: 8,
-    title: "ミニマルスペース",
-    year: "2025",
-    description: "ミニマリズムの美学",
-    image: "/2025-08_Spring_Portrait_of_Ilona_Lippich_P15.jpg",
-    tags: ["ミニマル", "空間", "シンプル"],
+    title: "模写『バルコニーの女性と子ども』",
+    year: "2025-01",
+    description: "ベルト・モリゾ作の模写",
+    image: "/2025-01_morizo_F10.jpg",
+    tags: ["模写", "人物", "屋外"],
     fullDescription:
-      "ミニマリズムの哲学に基づき、余白と要素の配置を慎重に考慮した作品です。少ない要素で最大限の表現を目指し、シンプルさの中に深い意味を込めています。静寂と調和を感じられる空間を創出しました。",
-    medium: "デジタルアート",
-    dimensions: "3000 x 3000 px",
+      "印象派時代の作品の模写に挑戦したくて、ベルトモリゾの作品を選びました。",
+    medium: "油彩／カンヴァス",
+    dimensions: "F10",
   },
-]
+  {
+    id: 9,
+    title: "模写『赤い絨毯』",
+    year: "2025-02",
+    description: "レッサー・ユリィ作の模写",
+    image: "/2025-02_red_carpet_M12.jpg",
+    tags: ["模写", "人物", "屋内"],
+    fullDescription:
+      "前作で印象派に近い作品の要点理解が少し進んだので、挑戦したかったレッサー・ユリィの作品を模写しました。ペインティングナイフも使いながら厚塗りを意識しました。",
+    medium: "油彩／カンヴァス",
+    dimensions: "M12",
+  },
+  {
+    id: 10,
+    title: "模写『夜のポツダム広場』",
+    year: "2025-04",
+    description: "レッサー・ユリィ作の模写",
+    image: "/2025-04_potsdam_F12.jpg",
+    tags: ["模写", "風景", "夜景"],
+    fullDescription: "前作に引き続きレッサーユリィ作品の模写になります。",
+    medium: "油彩／カンヴァス",
+    dimensions: "F12",
+  },
+  {
+    id: 11,
+    title: "模写『春――リッピヒ・イロナの肖像』",
+    year: "2025-08",
+    description: "ロツ・カーロイ作の模写",
+    image: "/2025-08_Spring_Portrait_of_Ilona_Lippich_P15.jpg",
+    tags: ["模写", "人物", "肖像"],
+    fullDescription:
+      "以前からロツ・カーロイのこの作品に挑戦してみたっかたので模写しました。",
+    medium: "油彩／カンヴァス",
+    dimensions: "P15",
+  },
+  {
+    id: 12,
+    title: "模写『コリウール』",
+    year: "2025-11",
+    description: "アンリ・マルタン作の模写",
+    image: "/2025-11_F8.jpg",
+    tags: ["模写", "風景"],
+    fullDescription:
+      "後期印象派に近い作品に挑戦してみたく、アンリ・マルタンの本作を模写しました。",
+    medium: "油彩／カンヴァス",
+    dimensions: "F8",
+  },
+];
