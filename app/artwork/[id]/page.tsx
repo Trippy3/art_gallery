@@ -89,7 +89,7 @@ export default async function ArtworkDetailPage({
                       </p>
                     </div>
                     <div>
-                      <p className="text-muted-foreground mb-1">メディウム</p>
+                      <p className="text-muted-foreground mb-1">技法・材質</p>
                       <p className="text-foreground font-medium">
                         {artwork.medium}
                       </p>

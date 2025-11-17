@@ -88,7 +88,7 @@ Artworks are stored in an array within `horizontal-scroll-gallery.tsx`:
 - **Full description section** ("作品について")
 - **Specifications** ("作品情報"):
   - 制作年 (year)
-  - メディウム (medium): デジタルアート or ミックスメディア
+  - 技法・材質 (medium): デジタルアート or ミックスメディア
   - サイズ (dimensions): Pixel dimensions
 - **Tags** with pill styling
 
@@ -110,7 +110,7 @@ Only available in detail page:
 Full-page layout with Header and Footer components.
 
 #### Sections
-1. **Hero Section**: 
+1. **Hero Section**:
    - Title: "私について"
    - Subtitle: "About Me"
 
