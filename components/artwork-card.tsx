@@ -12,19 +12,25 @@ interface ArtworkCardProps {
   artwork: Artwork;
   index: number;
   scrollProgress: number;
+  totalArtworks: number;
 }
 
 export function ArtworkCard({
   artwork,
   index,
   scrollProgress,
+  totalArtworks,
 }: ArtworkCardProps) {
   const [isHovered, setIsHovered] = useState(false);
 
   // Calculate individual card progress for staggered animations
+  // Dynamic calculation based on total artworks count for future-proof scaling
+  const staggerMultiplier = totalArtworks * 0.8; // Scale based on total count
+  const delayPerCard = 0.5; // Reduced from 0.8 for smoother, earlier reveals
+
   const cardProgress = Math.max(
     0,
-    Math.min(1, scrollProgress * 8 - index * 0.8),
+    Math.min(1, scrollProgress * staggerMultiplier - index * delayPerCard),
   );
 
   return (

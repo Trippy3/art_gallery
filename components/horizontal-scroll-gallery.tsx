@@ -10,6 +10,7 @@ export function HorizontalScrollGallery() {
   const [scrollProgress, setScrollProgress] = useState(0);
 
   const reversedArtworks = [...artworks].reverse();
+  const totalArtworks = artworks.length;
 
   useEffect(() => {
     const container = containerRef.current;
@@ -113,6 +114,7 @@ export function HorizontalScrollGallery() {
                           artwork={artwork}
                           index={index}
                           scrollProgress={scrollProgress}
+                          totalArtworks={totalArtworks}
                         />
                       </div>
                     )}
@@ -130,6 +132,7 @@ export function HorizontalScrollGallery() {
                           artwork={artwork}
                           index={index}
                           scrollProgress={scrollProgress}
+                          totalArtworks={totalArtworks}
                         />
                       </div>
                     )}
