@@ -8,6 +8,7 @@ export interface Artwork {
   fullDescription: string;
   medium: string;
   dimensions: string;
+  orientation: "portrait" | "landscape"; // 手動設定: portrait=縦長, landscape=横長
 }
 
 export const artworks: Artwork[] = [
@@ -22,6 +23,7 @@ export const artworks: Artwork[] = [
       "油彩に初めて挑戦したときの作品です。下地はローアンバーで処理し、仕上げにコーパルペインティングオイルでツヤを付けています。",
     medium: "油彩／カンヴァス",
     dimensions: "F6",
+    orientation: "landscape",
   },
   {
     id: 2,
@@ -34,6 +36,7 @@ export const artworks: Artwork[] = [
       "下地はウルトラマリンで処理し、仕上げにコーパルペインティングオイルでツヤを付けています。",
     medium: "油彩／カンヴァス",
     dimensions: "F6",
+    orientation: "landscape",
   },
   {
     id: 3,
@@ -46,6 +49,7 @@ export const artworks: Artwork[] = [
       "風景に挑戦したくなり身近な都庁を選択しました。下地はローアンバーで処理し、仕上げにコーパルペインティングオイルでツヤを付けています。",
     medium: "油彩／カンヴァス",
     dimensions: "F6",
+    orientation: "landscape",
   },
   {
     id: 4,
@@ -58,6 +62,7 @@ export const artworks: Artwork[] = [
       "夜景に挑戦したくなり、西から東へ移動する際に見かける景色を選択しました。下地は紫系の色を使い、マットペインティングオイルを使いツヤが出ない画面に挑戦しました。",
     medium: "油彩／カンヴァス",
     dimensions: "F8",
+    orientation: "portrait",
   },
   {
     id: 5,
@@ -71,6 +76,7 @@ export const artworks: Artwork[] = [
       "人物画に挑戦したくなり、難易度を考慮してグルーズの本作を模写することにしました。",
     medium: "油彩／カンヴァス",
     dimensions: "F6",
+    orientation: "portrait",
   },
   {
     id: 6,
@@ -84,6 +90,7 @@ export const artworks: Artwork[] = [
       "ルブランの作品の模写に挑戦しました。本作から下地にジェッソを塗り始めました。",
     medium: "油彩／カンヴァス",
     dimensions: "F8",
+    orientation: "portrait",
   },
   {
     id: 7,
@@ -96,6 +103,7 @@ export const artworks: Artwork[] = [
       "前作に続きルブランの作品の模写になります。3層程度ジェッソを塗ってから、やすりで削り下地の層で引っかからないよう工夫をしました。",
     medium: "油彩／カンヴァス",
     dimensions: "F10",
+    orientation: "portrait",
   },
   {
     id: 8,
@@ -108,6 +116,7 @@ export const artworks: Artwork[] = [
       "印象派時代の作品の模写に挑戦したくて、ベルトモリゾの作品を選びました。",
     medium: "油彩／カンヴァス",
     dimensions: "F10",
+    orientation: "portrait",
   },
   {
     id: 9,
@@ -120,6 +129,7 @@ export const artworks: Artwork[] = [
       "前作で印象派に近い作品の要点理解が少し進んだので、挑戦したかったレッサー・ユリィの作品を模写しました。ペインティングナイフも使いながら厚塗りを意識しました。",
     medium: "油彩／カンヴァス",
     dimensions: "M12",
+    orientation: "portrait",
   },
   {
     id: 10,
@@ -131,6 +141,7 @@ export const artworks: Artwork[] = [
     fullDescription: "前作に引き続きレッサーユリィ作品の模写になります。",
     medium: "油彩／カンヴァス",
     dimensions: "F12",
+    orientation: "landscape",
   },
   {
     id: 11,
@@ -143,6 +154,7 @@ export const artworks: Artwork[] = [
       "以前からロツ・カーロイのこの作品に挑戦してみたっかたので模写しました。",
     medium: "油彩／カンヴァス",
     dimensions: "P15",
+    orientation: "portrait",
   },
   {
     id: 12,
@@ -155,5 +167,6 @@ export const artworks: Artwork[] = [
       "後期印象派に近い作品に挑戦してみたく、アンリ・マルタンの本作を模写しました。",
     medium: "油彩／カンヴァス",
     dimensions: "F8",
+    orientation: "landscape",
   },
 ];

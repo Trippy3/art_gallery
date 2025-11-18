@@ -33,9 +33,15 @@ export function ArtworkCard({
     Math.min(1, scrollProgress * staggerMultiplier - index * delayPerCard),
   );
 
+  // Determine card dimensions based on orientation
+  const isLandscape = artwork.orientation === "landscape";
+  const sizeClasses = isLandscape
+    ? "w-[400px] sm:w-[500px] md:w-[600px] h-[300px] sm:h-[380px] md:h-[450px]" // 横長
+    : "w-[280px] sm:w-[350px] md:w-[400px] h-[400px] sm:h-[500px] md:h-[550px]"; // 縦長（デフォルト）
+
   return (
     <Card
-      className="relative flex-shrink-0 w-[280px] sm:w-[350px] md:w-[400px] h-[400px] sm:h-[500px] md:h-[550px] overflow-hidden group cursor-pointer transition-all duration-500"
+      className={`relative flex-shrink-0 ${sizeClasses} overflow-hidden group cursor-pointer transition-all duration-500`}
       style={{
         opacity: cardProgress,
         transform: `scale(${0.8 + cardProgress * 0.2})`,
