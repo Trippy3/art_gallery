@@ -310,8 +310,8 @@ test.describe('About Me Page', () => {
 
       await page.waitForTimeout(1500)
 
-      // Should be scrolled to year section
-      const yearMarker = page.locator('[id="year-2024"]').first()
+      // Should be scrolled to first 2024 artwork (year-2024-03)
+      const yearMarker = page.locator('[id="year-2024-03"]').first()
       await expect(yearMarker).toBeInViewport()
     })
   })

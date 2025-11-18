@@ -77,12 +77,12 @@ test.describe('Navigation', () => {
       await expect(historyLabel).toBeVisible()
     })
 
-    test('should display all year buttons (2025-2021)', async ({ page }) => {
+    test('should display all year buttons (2025-2022)', async ({ page }) => {
       const menuButton = page.locator(selectors.menuButton)
       await menuButton.click()
 
-      // Check for all year buttons
-      const years = ['2025年', '2024年', '2023年', '2022年', '2021年']
+      // Check for all year buttons (data spans 2022-2025)
+      const years = ['2025年', '2024年', '2023年', '2022年']
       for (const year of years) {
         const yearButton = page.locator(`text=${year}`)
         await expect(yearButton).toBeVisible()
@@ -132,8 +132,8 @@ test.describe('Navigation', () => {
       // Wait for smooth scroll
       await page.waitForTimeout(1500)
 
-      // Check if year-2025 marker is in viewport
-      const yearMarker = page.locator('[id="year-2025"]').first()
+      // Check if first 2025 artwork marker (2025-01) is in viewport
+      const yearMarker = page.locator('[id="year-2025-01"]').first()
       await expect(yearMarker).toBeInViewport()
     })
 
@@ -147,8 +147,8 @@ test.describe('Navigation', () => {
       // Wait for smooth scroll
       await page.waitForTimeout(1500)
 
-      // Check if year-2024 marker is in viewport
-      const yearMarker = page.locator('[id="year-2024"]').first()
+      // Check if first 2024 artwork marker (2024-03) is in viewport
+      const yearMarker = page.locator('[id="year-2024-03"]').first()
       await expect(yearMarker).toBeInViewport()
     })
 
@@ -161,7 +161,8 @@ test.describe('Navigation', () => {
 
       await page.waitForTimeout(1500)
 
-      const yearMarker = page.locator('[id="year-2023"]').first()
+      // Check if first 2023 artwork marker (2023-02) is in viewport
+      const yearMarker = page.locator('[id="year-2023-02"]').first()
       await expect(yearMarker).toBeInViewport()
     })
 
@@ -174,20 +175,8 @@ test.describe('Navigation', () => {
 
       await page.waitForTimeout(1500)
 
-      const yearMarker = page.locator('[id="year-2022"]').first()
-      await expect(yearMarker).toBeInViewport()
-    })
-
-    test('should scroll to 2021 section', async ({ page }) => {
-      const menuButton = page.locator(selectors.menuButton)
-      await menuButton.click()
-
-      const year2021Button = page.locator(selectors.year2021Link)
-      await year2021Button.click()
-
-      await page.waitForTimeout(1500)
-
-      const yearMarker = page.locator('[id="year-2021"]').first()
+      // Check if first 2022 artwork marker (2022-10) is in viewport
+      const yearMarker = page.locator('[id="year-2022-10"]').first()
       await expect(yearMarker).toBeInViewport()
     })
 

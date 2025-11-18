@@ -3,15 +3,20 @@
 import { useState } from "react"
 import { Menu, X } from "lucide-react"
 import Link from "next/link"
+import { artworks } from "@/lib/data/artworks"
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
   const scrollToYear = (year: number) => {
-    const element = document.getElementById(`year-${year}`)
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth", block: "center" })
-      setIsMenuOpen(false)
+    // Find the first artwork whose year starts with this year
+    const firstArtworkOfYear = artworks.find(artwork => artwork.year.startsWith(year.toString()))
+    if (firstArtworkOfYear) {
+      const element = document.getElementById(`year-${firstArtworkOfYear.year}`)
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth", block: "center" })
+        setIsMenuOpen(false)
+      }
     }
   }
 
@@ -73,12 +78,6 @@ export function Header() {
                     className="text-sm text-muted-foreground hover:text-foreground transition-colors text-left"
                   >
                     2022年
-                  </button>
-                  <button
-                    onClick={() => scrollToYear(2021)}
-                    className="text-sm text-muted-foreground hover:text-foreground transition-colors text-left"
-                  >
-                    2021年
                   </button>
                 </div>
               </div>

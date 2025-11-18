@@ -12,7 +12,6 @@ export const selectors = {
   year2024Link: 'text=2024年',
   year2023Link: 'text=2023年',
   year2022Link: 'text=2022年',
-  year2021Link: 'text=2021年',
 
   // Home Page
   heroSection: 'section:first-of-type',
