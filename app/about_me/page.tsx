@@ -31,15 +31,15 @@ export default function AboutMePage() {
 
               <div className="space-y-4">
                 <h2 className="text-2xl font-semibold text-foreground">
-                  Aviary
+                  Torii
                 </h2>
                 <p className="text-muted-foreground leading-relaxed">
-                  デジタルアートとビジュアルデザインを専門とするアーティストです。
-                  自然と都市の融合、抽象的な形と色彩の探求をテーマに作品を制作しています。
+                  趣味で油絵を描いています。
+                  美術展で西洋絵画を見るのも好きで、企画展はだいたい図録も買ってしまいます。
                 </p>
                 <p className="text-muted-foreground leading-relaxed">
-                  2021年から本格的にデジタルアート制作を開始し、
-                  独自のスタイルを追求しながら、様々な表現方法に挑戦しています。
+                  2021年頃から絵画教室に通っています。
+                  元々デジタルで描いていたのですが教室に通い始めてからはアナログメインです。
                 </p>
               </div>
             </section>
@@ -52,21 +52,19 @@ export default function AboutMePage() {
               <div className="grid sm:grid-cols-2 gap-6">
                 <div className="p-6 rounded-lg bg-card border border-border space-y-3">
                   <h3 className="text-xl font-medium text-foreground">
-                    自然との対話
+                    自分にとっての美を見つける
                   </h3>
                   <p className="text-muted-foreground leading-relaxed">
-                    自然の有機的な形や色彩からインスピレーションを得て、
-                    デジタルの世界で新しい表現を探求しています。
+                    絵画という創作だからこそ、自分が綺麗で美しいと思えるものだけを描いていたいと思っています。
                   </p>
                 </div>
 
                 <div className="p-6 rounded-lg bg-card border border-border space-y-3">
                   <h3 className="text-xl font-medium text-foreground">
-                    抽象と具象の融合
+                    表現の模索
                   </h3>
                   <p className="text-muted-foreground leading-relaxed">
-                    抽象的な形と具体的なモチーフを組み合わせることで、
-                    見る人それぞれの解釈を生み出す作品を目指しています。
+                    油彩には多くの画材や材料が関わるので、たくさんの道具を試す中で表現を模索できればと考えています。
                   </p>
                 </div>
               </div>
@@ -78,14 +76,7 @@ export default function AboutMePage() {
                 スキル
               </h2>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-                {[
-                  "デジタルペインティング",
-                  "3Dモデリング",
-                  "コンセプトアート",
-                  "カラーグレーディング",
-                  "コンポジション",
-                  "ビジュアルデザイン",
-                ].map((skill) => (
+                {["油彩", "デッサン", "模写", "Webページ制作"].map((skill) => (
                   <div
                     key={skill}
                     className="p-4 text-center rounded-lg bg-secondary text-secondary-foreground"
@@ -93,31 +84,6 @@ export default function AboutMePage() {
                     {skill}
                   </div>
                 ))}
-              </div>
-            </section>
-
-            {/* Contact Section */}
-            <section className="space-y-6 py-8 text-center">
-              <h2 className="text-3xl font-semibold text-foreground">
-                お問い合わせ
-              </h2>
-              <p className="text-muted-foreground leading-relaxed max-w-2xl mx-auto">
-                作品に関するお問い合わせやコラボレーションのご相談は、
-                お気軽にご連絡ください。
-              </p>
-              <div className="flex flex-wrap justify-center gap-4">
-                <a
-                  href="mailto:contact@example.com"
-                  className="px-6 py-3 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
-                >
-                  メールで連絡
-                </a>
-                <a
-                  href="#"
-                  className="px-6 py-3 rounded-lg border border-border text-foreground hover:bg-secondary transition-colors"
-                >
-                  SNSをフォロー
-                </a>
               </div>
             </section>
           </div>
