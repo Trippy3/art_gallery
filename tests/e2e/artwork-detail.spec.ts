@@ -113,13 +113,19 @@ test.describe("Artwork Detail Page", () => {
       expect(alt).toBeTruthy();
     });
 
-    test("should have 3:4 aspect ratio container", async ({ page }) => {
-      const imageContainer = page.locator(".relative.aspect-\\[3\\/4\\]");
+    test("should have aspect ratio container based on orientation", async ({ page }) => {
+      // ID 1 is landscape, so should have 4:3 aspect ratio
+      const imageContainer = page.locator(".relative.cursor-pointer").first();
       await expect(imageContainer).toBeVisible();
+
+      // Check that it has one of the aspect ratio classes
+      const classes = await imageContainer.getAttribute("class");
+      const hasAspectRatio = classes?.includes("aspect-[") || false;
+      expect(hasAspectRatio).toBe(true);
     });
 
     test("should have rounded corners on image container", async ({ page }) => {
-      const imageContainer = page.locator(".relative.aspect-\\[3\\/4\\]");
+      const imageContainer = page.locator(".relative.cursor-pointer").first();
       await expect(imageContainer).toHaveClass(/rounded-lg/);
     });
 
@@ -628,6 +634,175 @@ test.describe("Artwork Detail Page", () => {
       // Descriptions should have muted color (check first one)
       const description = page.locator("p.text-muted-foreground").first();
       await expect(description).toBeVisible();
+    });
+  });
+
+  test.describe("Artwork Orientation Support", () => {
+    test("should display portrait artwork with 3:4 aspect ratio", async ({ page }) => {
+      // Find a portrait artwork (e.g., ID 5, 6, 7, 8, 11)
+      await page.goto("/artwork/5");
+      await page.waitForLoadState("networkidle");
+
+      const imageContainer = page.locator(".relative.aspect-\\[3\\/4\\]");
+      await expect(imageContainer).toBeVisible();
+    });
+
+    test("should display landscape artwork with 4:3 aspect ratio", async ({ page }) => {
+      // Find a landscape artwork (e.g., ID 1, 2, 3, 4, 10, 12)
+      await page.goto("/artwork/1");
+      await page.waitForLoadState("networkidle");
+
+      const imageContainer = page.locator(".relative.aspect-\\[4\\/3\\]");
+      await expect(imageContainer).toBeVisible();
+    });
+
+    test("should have orientation data for all artworks", async ({ page }) => {
+      // Verify that artwork data includes orientation field
+      const portraitCount = artworkData.filter(a => a.orientation === 'portrait').length;
+      const landscapeCount = artworkData.filter(a => a.orientation === 'landscape').length;
+
+      // Should have both portrait and landscape artworks
+      expect(portraitCount).toBeGreaterThan(0);
+      expect(landscapeCount).toBeGreaterThan(0);
+      expect(portraitCount + landscapeCount).toBe(artworkData.length);
+    });
+  });
+
+  test.describe("Image Lightbox Functionality", () => {
+    test.beforeEach(async ({ page }) => {
+      await page.goto("/artwork/1");
+      await page.waitForLoadState("networkidle");
+    });
+
+    test("should display zoom icon on image", async ({ page }) => {
+      // Zoom icon is in bottom-right corner div
+      const zoomIconContainer = page.locator(".absolute.bottom-3.right-3");
+      await expect(zoomIconContainer).toBeVisible();
+
+      // Check for SVG icon inside
+      const zoomIcon = zoomIconContainer.locator("svg");
+      await expect(zoomIcon).toBeVisible();
+    });
+
+    test("should open lightbox when image is clicked", async ({ page }) => {
+      // Click on the image container
+      const imageContainer = page.locator(".relative.cursor-pointer").first();
+      await imageContainer.click();
+
+      // Wait for lightbox to appear
+      await page.waitForTimeout(300);
+
+      // Lightbox should be visible
+      const lightbox = page.locator(".fixed.inset-0.z-\\[100\\]");
+      await expect(lightbox).toBeVisible();
+    });
+
+    test("should display image in lightbox with correct styling", async ({ page }) => {
+      // Click to open lightbox
+      const imageContainer = page.locator(".relative.cursor-pointer").first();
+      await imageContainer.click();
+      await page.waitForTimeout(300);
+
+      // Check lightbox background has blur
+      const lightbox = page.locator(".fixed.inset-0");
+      await expect(lightbox).toHaveClass(/backdrop-blur-md/);
+      await expect(lightbox).toHaveClass(/bg-black\/80/);
+    });
+
+    test("should display close button in lightbox", async ({ page }) => {
+      // Open lightbox
+      const imageContainer = page.locator(".relative.cursor-pointer").first();
+      await imageContainer.click();
+      await page.waitForTimeout(300);
+
+      // Close button should be visible
+      const closeButton = page.locator("button[aria-label='閉じる']");
+      await expect(closeButton).toBeVisible();
+    });
+
+    test("should close lightbox when close button is clicked", async ({ page }) => {
+      // Open lightbox
+      const imageContainer = page.locator(".relative.cursor-pointer").first();
+      await imageContainer.click();
+      await page.waitForTimeout(300);
+
+      // Click close button
+      const closeButton = page.locator("button[aria-label='閉じる']");
+      await closeButton.click();
+      await page.waitForTimeout(300);
+
+      // Lightbox should be gone
+      const lightbox = page.locator(".fixed.inset-0.z-\\[100\\]");
+      await expect(lightbox).not.toBeVisible();
+    });
+
+    test("should close lightbox when background is clicked", async ({ page }) => {
+      // Open lightbox
+      const imageContainer = page.locator(".relative.cursor-pointer").first();
+      await imageContainer.click();
+      await page.waitForTimeout(300);
+
+      // Click on background (not on image)
+      const lightbox = page.locator(".fixed.inset-0.z-\\[100\\]");
+      await lightbox.click({ position: { x: 10, y: 10 } });
+      await page.waitForTimeout(300);
+
+      // Lightbox should be gone
+      await expect(lightbox).not.toBeVisible();
+    });
+
+    test("should close lightbox when ESC key is pressed", async ({ page }) => {
+      // Open lightbox
+      const imageContainer = page.locator(".relative.cursor-pointer").first();
+      await imageContainer.click();
+      await page.waitForTimeout(300);
+
+      // Press ESC key
+      await page.keyboard.press("Escape");
+      await page.waitForTimeout(300);
+
+      // Lightbox should be gone
+      const lightbox = page.locator(".fixed.inset-0.z-\\[100\\]");
+      await expect(lightbox).not.toBeVisible();
+    });
+
+    test("should display artwork title and year in lightbox", async ({ page }) => {
+      const artwork = artworkData[0];
+
+      // Open lightbox
+      const imageContainer = page.locator(".relative.cursor-pointer").first();
+      await imageContainer.click();
+      await page.waitForTimeout(300);
+
+      // Check for title and year in lightbox
+      const info = page.locator(".absolute.bottom-4");
+      await expect(info).toContainText(artwork.title);
+      await expect(info).toContainText(artwork.year);
+    });
+
+    test("should prevent body scroll when lightbox is open", async ({ page }) => {
+      // Open lightbox
+      const imageContainer = page.locator(".relative.cursor-pointer").first();
+      await imageContainer.click();
+      await page.waitForTimeout(300);
+
+      // Check if body has overflow hidden
+      const bodyOverflow = await page.evaluate(() => document.body.style.overflow);
+      expect(bodyOverflow).toBe("hidden");
+    });
+
+    test("should display high quality image in lightbox", async ({ page }) => {
+      // Open lightbox
+      const imageContainer = page.locator(".relative.cursor-pointer").first();
+      await imageContainer.click();
+      await page.waitForTimeout(300);
+
+      // Find image in lightbox
+      const lightboxImage = page.locator(".fixed.inset-0 img").last();
+      await expect(lightboxImage).toBeVisible();
+
+      // Check object-contain class for aspect ratio preservation
+      await expect(lightboxImage).toHaveClass(/object-contain/);
     });
   });
 });

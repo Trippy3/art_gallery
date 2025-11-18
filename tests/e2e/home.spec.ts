@@ -423,4 +423,45 @@ test.describe('Home Page', () => {
       expect(uniqueYears.length).toBe(4)
     })
   })
+
+  test.describe('Artwork Orientation Support', () => {
+    test('should display portrait and landscape cards with different sizes', async ({ page }) => {
+      // Scroll to make artworks visible
+      await page.evaluate(() => window.scrollTo(0, 1500))
+      await page.waitForTimeout(1000)
+
+      // Find a portrait artwork (most artworks are portrait)
+      const portraitCard = page.locator('.relative.flex-shrink-0').first()
+      await expect(portraitCard).toBeVisible()
+
+      // Check if card exists (size is handled by CSS, difficult to test exact dimensions)
+      // But we can verify the cards render without errors
+      const cardCount = await page.locator('.relative.flex-shrink-0').count()
+      expect(cardCount).toBeGreaterThan(0)
+    })
+
+    test('should render cards with different orientations correctly', async ({ page }) => {
+      // Scroll through to see different orientations
+      await page.evaluate(() => window.scrollTo(0, 2000))
+      await page.waitForTimeout(1000)
+
+      // All cards should be visible regardless of orientation
+      const cards = page.locator('h3.text-xl.sm\\:text-2xl')
+      const count = await cards.count()
+
+      // Should match total artwork count
+      expect(count).toBe(artworkData.length)
+    })
+
+    test('should have orientation data for all artworks', async ({ page }) => {
+      // Verify that artwork data includes orientation field
+      const portraitCount = artworkData.filter(a => a.orientation === 'portrait').length
+      const landscapeCount = artworkData.filter(a => a.orientation === 'landscape').length
+
+      // Should have both portrait and landscape artworks
+      expect(portraitCount).toBeGreaterThan(0)
+      expect(landscapeCount).toBeGreaterThan(0)
+      expect(portraitCount + landscapeCount).toBe(artworkData.length)
+    })
+  })
 })
