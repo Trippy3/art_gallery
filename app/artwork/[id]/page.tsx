@@ -1,22 +1,55 @@
+"use client";
+
+import { useState, useEffect, use } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Footer } from "@/components/footer";
 import { artworks } from "@/lib/data/artworks";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, X, ZoomIn } from "lucide-react";
 
-export default async function ArtworkDetailPage({
+export default function ArtworkDetailPage({
   params,
 }: {
   params: Promise<{ id: string }>;
 }) {
-  const { id } = await params;
+  const [isLightboxOpen, setIsLightboxOpen] = useState(false);
+  const { id } = use(params);
+
   const artwork = artworks.find((a) => a.id === Number.parseInt(id));
 
   if (!artwork) {
     notFound();
   }
+
+  // Determine aspect ratio based on orientation
+  const aspectRatioClass = artwork.orientation === "landscape"
+    ? "aspect-[4/3]"  // 横長: 4:3
+    : "aspect-[3/4]"; // 縦長: 3:4 (デフォルト)
+
+  // Handle ESC key to close lightbox
+  useEffect(() => {
+    const handleEsc = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setIsLightboxOpen(false);
+      }
+    };
+    window.addEventListener("keydown", handleEsc);
+    return () => window.removeEventListener("keydown", handleEsc);
+  }, []);
+
+  // Prevent body scroll when lightbox is open
+  useEffect(() => {
+    if (isLightboxOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [isLightboxOpen]);
 
   return (
     <>
@@ -40,13 +73,20 @@ export default async function ArtworkDetailPage({
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
             <div className="grid md:grid-cols-2 gap-8 lg:gap-12">
               {/* Image */}
-              <div className="relative aspect-[3/4] rounded-lg overflow-hidden bg-secondary">
+              <div
+                className={`relative ${aspectRatioClass} rounded-lg overflow-hidden bg-secondary cursor-pointer`}
+                onClick={() => setIsLightboxOpen(true)}
+              >
                 <Image
                   src={artwork.image || "/placeholder.svg"}
                   alt={artwork.title}
                   fill
                   className="object-cover"
                 />
+                {/* Zoom icon box */}
+                <div className="absolute bottom-3 right-3 p-2 bg-background/80 hover:bg-background rounded-lg backdrop-blur-sm transition-colors shadow-lg">
+                  <ZoomIn className="h-5 w-5 text-foreground" />
+                </div>
               </div>
 
               {/* Details */}
@@ -125,6 +165,45 @@ export default async function ArtworkDetailPage({
         </div>
       </main>
       <Footer />
+
+      {/* Lightbox Modal */}
+      {isLightboxOpen && (
+        <div
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-md p-4"
+          onClick={() => setIsLightboxOpen(false)}
+        >
+          {/* Close button */}
+          <button
+            className="absolute top-4 right-4 p-2 rounded-full bg-background/80 hover:bg-background transition-colors"
+            onClick={() => setIsLightboxOpen(false)}
+            aria-label="閉じる"
+          >
+            <X className="h-6 w-6" />
+          </button>
+
+          {/* Image container */}
+          <div
+            className="relative max-w-[90vw] max-h-[90vh] w-fit h-fit"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <Image
+              src={artwork.image || "/placeholder.svg"}
+              alt={artwork.title}
+              width={2000}
+              height={2000}
+              className="max-w-full max-h-[90vh] w-auto h-auto object-contain"
+              quality={100}
+            />
+          </div>
+
+          {/* Image info */}
+          <div className="absolute bottom-4 left-4 right-4 text-center">
+            <p className="text-white text-sm font-medium drop-shadow-lg">
+              {artwork.title} ({artwork.year})
+            </p>
+          </div>
+        </div>
+      )}
     </>
   );
 }
