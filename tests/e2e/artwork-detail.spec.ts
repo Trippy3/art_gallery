@@ -12,7 +12,7 @@ test.describe("Artwork Detail Page", () => {
       expect(page.url()).toContain("/artwork/1");
 
       // Check page title
-      await expect(page).toHaveTitle(/アートポートフォリオ|Art Portfolio/);
+      await expect(page).toHaveTitle(/Aviary's Art Gallery/);
     });
 
     test("should load all 12 artwork detail pages", async ({ page }) => {

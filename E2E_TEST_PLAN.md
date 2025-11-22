@@ -2,7 +2,7 @@
 
 ## 📊 実装状況サマリー
 
-### ✅ 完了事項（2025-11-19時点）
+### ✅ 完了事項（2025-11-23時点）
 - ✅ **フェーズ1**: 初期セットアップ完了
   - Playwright v1.56.0インストール済み
   - 設定ファイル作成完了
@@ -10,19 +10,21 @@
   - package.jsonスクリプト追加済み
 
 - ✅ **フェーズ2**: コアテスト実装完了
-  - ホームページテスト: 35テストケース実装 ✅
+  - ホームページテスト: 37テストケース実装 ✅
     - 基本機能テスト: 32ケース
-    - 作品向き対応テスト: 3ケース (NEW)
+    - 作品向き対応テスト: 3ケース
+    - ビューポートフォーカス/カードクリック: 2ケース (NEW)
   - ナビゲーションテスト: 39テストケース実装 ✅
-  - About Meページテスト: 52テストケース実装 ✅
+  - About Meページテスト: 43テストケース実装 ✅
+    - 基本機能テスト: 43ケース（Contact section削除後）
   - アートワーク詳細ページテスト: 78テストケース実装 ✅
     - 基本機能テスト: 65ケース
-    - 作品向き対応テスト: 3ケース (NEW)
-    - ライトボックス機能テスト: 10ケース (NEW)
+    - 作品向き対応テスト: 3ケース
+    - ライトボックス機能テスト: 10ケース
 
-- **合計**: 204テストケース実装済み
-- **テスト成功率**: 100% (204/204 passed on chromium) ✅
-- **実装工数**: 約14時間
+- **合計**: 179テストケース実装済み
+- **テスト成功率**: 100% (179/179 passed on chromium) ✅
+- **実装工数**: 約16時間
 
 ### 🔧 修正対応履歴
 以下の問題を特定・修正し、全テスト成功を達成:
@@ -70,6 +72,27 @@
 - 閉じる方法: ESCキー、背景クリック、Xボタン
 - ボディスクロール防止、高画質表示（quality=100）
 - 追加テスト: 10ケース（ライトボックス開閉、スタイリング、キーボード操作など）
+
+### 🎨 新機能対応履歴（2025-11-23）
+**ビューポートベースのフォーカス検出**:
+- 画面中央に位置するアートワークカードに自動的に情報（タイトル、説明、タグ）を表示
+- `getBoundingClientRect()`を使用した厳密なビューポート中央計算
+- PC/モバイル共通のUX（ホバーに依存しない）
+- フォールバックとしてホバーでも情報表示
+- 追加テスト: 1ケース（ビューポート中央カードのフォーカス確認）
+
+**カードクリックナビゲーション**:
+- アートワークカード全体をクリック可能に
+- クリックで詳細ページを新しいタブで開く（`window.open()`）
+- 「詳細を見る」ボタンは継続して表示（stopPropagationで独立動作）
+- 追加テスト: 1ケース（カードクリックで新しいタブに遷移確認）
+
+**About Meページコンテンツ更新対応**:
+- アーティスト名: Aviary → Torii
+- 制作理念: 「自然との対話」「抽象と具象の融合」→「自分にとっての美を見つける」「表現の模索」
+- スキル: 6個 → 4個（油彩、デッサン、模写、Webページ制作）
+- Contact section: 削除
+- テスト修正: セレクター更新、不要テスト削除（約9テストケース削減）
 
 ### 🚧 未実装（今後の計画）
 - フェーズ2: レスポンシブデザインテスト（専用ファイル）
@@ -393,37 +416,32 @@ test.describe('Navigation', () => {
 - [ ] ヒーローセクション「私について / About Me」が表示される
 
 **プロフィールセクション**
-- [ ] アーティスト写真が表示される
-- [ ] 画像のaltテキストが「Artist Profile」
-- [ ] アーティスト名「Aviary」が表示される
-- [ ] バイオグラフィーテキストが表示される（2段落）
-- [ ] グリッドレイアウトが正しい（画像と文章が横並び）
+- [x] アーティスト写真が表示される
+- [x] 画像のaltテキストが「Artist Profile」
+- [x] アーティスト名「Torii」が表示される
+- [x] バイオグラフィーテキストが表示される（2段落）
+- [x] グリッドレイアウトが正しい（画像と文章が横並び）
+- [x] バイオに「油絵」の記述がある
+- [x] バイオに「2021年」の記述がある
 
 **制作理念セクション**
-- [ ] セクションタイトル「制作理念」が表示される
-- [ ] 「自然との対話」カードが表示される
-- [ ] 「自然との対話」の説明文が表示される
-- [ ] 「抽象と具象の融合」カードが表示される
-- [ ] 「抽象と具象の融合」の説明文が表示される
-- [ ] 2つのカードがグリッドレイアウトで表示される
+- [x] セクションタイトル「制作理念」が表示される
+- [x] 「自分にとっての美を見つける」カードが表示される
+- [x] 「自分にとっての美を見つける」の説明文が表示される
+- [x] 「表現の模索」カードが表示される
+- [x] 「表現の模索」の説明文が表示される
+- [x] 2つのカードがグリッドレイアウトで表示される
 
 **スキルセクション**
-- [ ] セクションタイトル「スキル」が表示される
-- [ ] 6つのスキルバッジが表示される
-- [ ] スキル: デジタルペインティング
-- [ ] スキル: 3Dモデリング
-- [ ] スキル: コンセプトアート
-- [ ] スキル: カラーグレーディング
-- [ ] スキル: コンポジション
-- [ ] スキル: ビジュアルデザイン
-- [ ] グリッドレイアウトが正しい（2-3列）
+- [x] セクションタイトル「スキル」が表示される
+- [x] 4つのスキルバッジが表示される
+- [x] スキル: 油彩
+- [x] スキル: デッサン
+- [x] スキル: 模写
+- [x] スキル: Webページ制作
+- [x] グリッドレイアウトが正しい（2-3列）
 
-**コンタクトセクション**
-- [ ] セクションタイトル「お問い合わせ」が表示される
-- [ ] 説明文が表示される
-- [ ] 「メールで連絡」ボタンが表示される
-- [ ] 「SNSをフォロー」ボタンが表示される
-- [ ] メールボタンのhrefが「mailto:」で始まる
+**注意**: Contact sectionはページから削除されたため、関連テストは削除済み
 
 #### サンプルコード
 ```typescript
@@ -441,7 +459,7 @@ test.describe('About Me Page', () => {
   })
 
   test('should display artist profile', async ({ page }) => {
-    const artistName = page.locator('text=Aviary')
+    const artistName = page.locator('text=Torii')
     await expect(artistName).toBeVisible()
 
     const artistImage = page.locator('img[alt="Artist Profile"]')
@@ -452,37 +470,24 @@ test.describe('About Me Page', () => {
     const title = page.locator('text=制作理念')
     await expect(title).toBeVisible()
 
-    const nature = page.locator('text=自然との対話')
-    await expect(nature).toBeVisible()
+    const beauty = page.locator('text=自分にとっての美を見つける')
+    await expect(beauty).toBeVisible()
 
-    const fusion = page.locator('text=抽象と具象の融合')
-    await expect(fusion).toBeVisible()
+    const expression = page.locator('text=表現の模索')
+    await expect(expression).toBeVisible()
   })
 
-  test('should display all 6 skills', async ({ page }) => {
+  test('should display all 4 skills', async ({ page }) => {
     const skills = [
-      'デジタルペインティング',
-      '3Dモデリング',
-      'コンセプトアート',
-      'カラーグレーディング',
-      'コンポジション',
-      'ビジュアルデザイン'
+      '油彩',
+      'デッサン',
+      '模写',
+      'Webページ制作'
     ]
 
     for (const skill of skills) {
       await expect(page.locator(`text=${skill}`)).toBeVisible()
     }
-  })
-
-  test('should display contact section', async ({ page }) => {
-    const contactTitle = page.locator('text=お問い合わせ')
-    await expect(contactTitle).toBeVisible()
-
-    const emailButton = page.locator('text=メールで連絡')
-    await expect(emailButton).toBeVisible()
-
-    const snsButton = page.locator('text=SNSをフォロー')
-    await expect(snsButton).toBeVisible()
   })
 })
 ```
@@ -1001,20 +1006,14 @@ export class AboutMePage {
   readonly artistName: Locator
   readonly philosophySection: Locator
   readonly skillsSection: Locator
-  readonly contactSection: Locator
-  readonly emailButton: Locator
-  readonly snsButton: Locator
 
   constructor(page: Page) {
     this.page = page
     this.heroSection = page.locator('text=私について')
     this.profileImage = page.locator('img[alt="Artist Profile"]')
-    this.artistName = page.locator('text=Aviary')
+    this.artistName = page.locator('text=Torii')
     this.philosophySection = page.locator('text=制作理念')
     this.skillsSection = page.locator('text=スキル')
-    this.contactSection = page.locator('text=お問い合わせ')
-    this.emailButton = page.locator('text=メールで連絡')
-    this.snsButton = page.locator('text=SNSをフォロー')
   }
 
   async goto() {
@@ -1023,10 +1022,6 @@ export class AboutMePage {
 
   async getSkills() {
     return await this.page.locator('.grid div').allTextContents()
-  }
-
-  async clickEmailButton() {
-    await this.emailButton.click()
   }
 }
 ```
@@ -1171,12 +1166,10 @@ export const artworkData = [
 export const years = ['2021', '2022', '2023', '2024']
 
 export const skills = [
-  'デジタルペインティング',
-  '3Dモデリング',
-  'コンセプトアート',
-  'カラーグレーディング',
-  'コンポジション',
-  'ビジュアルデザイン',
+  '油彩',
+  'デッサン',
+  '模写',
+  'Webページ制作',
 ]
 ```
 
@@ -1267,22 +1260,22 @@ export async function getLocalStorageItem(page: Page, key: string) {
 export const selectors = {
   // Header
   header: 'header',
-  logo: 'text=Aviary\'s Art Gallery',
+  logo: 'header >> text=Aviary\'s Art Gallery',
   menuButton: 'button[aria-label="メニュー"]',
   closeButton: 'button[aria-label="メニュー"]', // Same button, different icon
 
   // Navigation Menu
   menuDropdown: 'nav',
-  aboutLink: 'text=私について',
+  aboutLink: 'nav >> text=私について',
+  year2025Link: 'text=2025年',
   year2024Link: 'text=2024年',
   year2023Link: 'text=2023年',
   year2022Link: 'text=2022年',
-  year2021Link: 'text=2021年',
 
   // Home Page
   heroSection: 'section:first-of-type',
   gallerySection: 'section#work',
-  timelineIndicator: 'text=History',
+  timelineIndicator: 'section#work >> text=History',
   scrollHint: 'text=スクロールして作品を見る',
   artworkCard: '[data-testid="artwork-card"]',
   viewDetailsButton: 'text=詳細を見る',
@@ -1295,14 +1288,12 @@ export const selectors = {
   artworkTags: '.rounded span',
 
   // About Page
-  aboutHero: 'text=私について',
+  aboutHero: 'main >> h1:has-text("私について")',
   artistImage: 'img[alt="Artist Profile"]',
-  artistName: 'text=Aviary',
-  philosophyTitle: 'text=制作理念',
-  skillsTitle: 'text=スキル',
-  contactTitle: 'text=お問い合わせ',
-  emailButton: 'text=メールで連絡',
-  snsButton: 'text=SNSをフォロー',
+  artistName: 'main >> h2:has-text("Torii")',
+  philosophyTitle: 'h2:has-text("制作理念")',
+  skillsTitle: 'h2:has-text("スキル")',
+  // Note: Contact section removed from About Me page
 
   // Artwork Detail Page
   backButton: 'text=ギャラリーに戻る',
@@ -1612,8 +1603,8 @@ jobs:
 
 ---
 
-**最終更新**: 2025-11-19
-**バージョン**: 1.1
+**最終更新**: 2025-11-23
+**バージョン**: 1.2
 **作成者**: Claude Code Assistant
 
 ---
@@ -1685,3 +1676,35 @@ jobs:
 10. **作品タイトルと年が表示**
     - ライトボックス内に作品情報が表示される
     - タイトルと年が正しく表示される
+
+## 📝 追加テストケース詳細（v1.2）
+
+### ホームページ - ビューポートフォーカス機能テスト
+1. **画面中央のカードにフォーカス表示**
+   - スクロールで画面中央に来たカードに情報オーバーレイが表示される
+   - `opacity-100`クラスが適用される
+
+### ホームページ - カードクリックナビゲーションテスト
+1. **カードクリックで新しいタブに遷移**
+   - カードをクリックすると新しいタブで詳細ページが開く
+   - `context.waitForEvent('page')`で新しいタブを検出
+   - URLが`/artwork/\d+`パターンに一致
+
+### About Meページ - コンテンツ更新対応テスト
+1. **アーティスト名「Torii」の表示**
+   - h2要素でアーティスト名が表示される
+   - セレクタ: `main >> h2:has-text("Torii")`
+
+2. **制作理念カードの表示**
+   - 「自分にとっての美を見つける」カードが表示される
+   - 「表現の模索」カードが表示される
+   - 各カードに説明文が含まれる
+
+3. **4つのスキルバッジの表示**
+   - 油彩、デッサン、模写、Webページ制作
+   - exact matchを使用して厳密にマッチ（例: `page.getByText('油彩', { exact: true })`）
+
+### テストセレクタ更新詳細
+- `artistName`: `'main >> h2:has-text("Torii")'`（旧: Aviary）
+- `contactTitle`, `emailButton`, `snsButton`: 削除（Contact section削除のため）
+- スキルテストで`getByText(skill, { exact: true })`を使用（厳密マッチ）

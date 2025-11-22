@@ -31,12 +31,9 @@ export const selectors = {
   // About Page
   aboutHero: 'main >> h1:has-text("私について")',
   artistImage: 'img[alt="Artist Profile"]',
-  artistName: 'main >> h2:has-text("Aviary")',
+  artistName: 'main >> h2:has-text("Torii")',
   philosophyTitle: 'h2:has-text("制作理念")',
   skillsTitle: 'h2:has-text("スキル")',
-  contactTitle: 'h2:has-text("お問い合わせ")',
-  emailButton: 'a:has-text("メールで連絡")',
-  snsButton: 'a:has-text("SNSをフォロー")',
 
   // Artwork Detail Page
   backButton: 'text=ギャラリーに戻る',

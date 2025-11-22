@@ -14,7 +14,7 @@ test.describe('About Me Page', () => {
       expect(page.url()).toContain('/about_me')
 
       // Check page title
-      await expect(page).toHaveTitle(/アートポートフォリオ|Art Portfolio/)
+      await expect(page).toHaveTitle(/Aviary's Art Gallery/)
     })
 
     test('should display header and footer', async ({ page }) => {
@@ -53,10 +53,10 @@ test.describe('About Me Page', () => {
       await expect(artistImage).toHaveAttribute('alt', 'Artist Profile')
     })
 
-    test('should display artist name "Aviary"', async ({ page }) => {
+    test('should display artist name "Torii"', async ({ page }) => {
       const artistName = page.locator(selectors.artistName)
       await expect(artistName).toBeVisible()
-      await expect(artistName).toContainText('Aviary')
+      await expect(artistName).toContainText('Torii')
     })
 
     test('should display biography text', async ({ page }) => {
@@ -70,12 +70,12 @@ test.describe('About Me Page', () => {
 
     test('should display profile in grid layout', async ({ page }) => {
       // Profile section should have grid layout on md and above
-      const profileSection = page.locator('section').filter({ hasText: 'Aviary' })
+      const profileSection = page.locator('section').filter({ hasText: 'Torii' })
       await expect(profileSection).toBeVisible()
     })
 
-    test('should display bio about digital art', async ({ page }) => {
-      const bioText = page.locator('text=デジタルアート')
+    test('should display bio about oil painting', async ({ page }) => {
+      const bioText = page.locator('text=油絵')
       await expect(bioText.first()).toBeVisible()
     })
 
@@ -91,21 +91,21 @@ test.describe('About Me Page', () => {
       await expect(philosophyTitle).toBeVisible()
     })
 
-    test('should display "自然との対話" card', async ({ page }) => {
-      const natureCard = page.locator('text=自然との対話')
-      await expect(natureCard).toBeVisible()
+    test('should display "自分にとっての美を見つける" card', async ({ page }) => {
+      const card = page.locator('text=自分にとっての美を見つける')
+      await expect(card).toBeVisible()
 
       // Check description
-      const description = page.locator('text=自然の有機的な形や色彩')
+      const description = page.locator('text=絵画という創作だからこそ')
       await expect(description).toBeVisible()
     })
 
-    test('should display "抽象と具象の融合" card', async ({ page }) => {
-      const fusionCard = page.locator('text=抽象と具象の融合')
-      await expect(fusionCard).toBeVisible()
+    test('should display "表現の模索" card', async ({ page }) => {
+      const card = page.locator('text=表現の模索')
+      await expect(card).toBeVisible()
 
       // Check description
-      const description = page.locator('text=抽象的な形と具体的なモチーフ')
+      const description = page.locator('text=油彩には多くの画材や材料が関わる')
       await expect(description).toBeVisible()
     })
 
@@ -134,7 +134,7 @@ test.describe('About Me Page', () => {
       await expect(skillsTitle).toBeVisible()
     })
 
-    test('should display all 6 skills', async ({ page }) => {
+    test('should display all 4 skills', async ({ page }) => {
       for (const skill of skills) {
         // Use more specific selector to target skill badges
         const skillElement = page.locator(`.bg-secondary.text-secondary-foreground:has-text("${skill}")`)
@@ -152,65 +152,22 @@ test.describe('About Me Page', () => {
       const skillBadges = page.locator('.p-4.text-center.rounded-lg.bg-secondary')
       const count = await skillBadges.count()
 
-      expect(count).toBe(6)
+      expect(count).toBe(4)
     })
 
-    test('should display "デジタルペインティング"', async ({ page }) => {
-      const skill = page.locator('text=デジタルペインティング')
+    test('should display "油彩"', async ({ page }) => {
+      const skill = page.getByText('油彩', { exact: true })
       await expect(skill).toBeVisible()
     })
 
-    test('should display "3Dモデリング"', async ({ page }) => {
-      const skill = page.locator('text=3Dモデリング')
+    test('should display "デッサン"', async ({ page }) => {
+      const skill = page.locator('text=デッサン')
       await expect(skill).toBeVisible()
     })
 
-    test('should display "コンセプトアート"', async ({ page }) => {
-      const skill = page.locator('text=コンセプトアート')
+    test('should display "模写"', async ({ page }) => {
+      const skill = page.locator('text=模写')
       await expect(skill).toBeVisible()
-    })
-  })
-
-  test.describe('Contact Section', () => {
-    test('should display contact section title', async ({ page }) => {
-      const contactTitle = page.locator(selectors.contactTitle)
-      await expect(contactTitle).toBeVisible()
-    })
-
-    test('should display contact description', async ({ page }) => {
-      const description = page.locator('text=作品に関するお問い合わせ')
-      await expect(description).toBeVisible()
-    })
-
-    test('should display email button', async ({ page }) => {
-      const emailButton = page.locator(selectors.emailButton)
-      await expect(emailButton).toBeVisible()
-    })
-
-    test('should display SNS button', async ({ page }) => {
-      const snsButton = page.locator(selectors.snsButton)
-      await expect(snsButton).toBeVisible()
-    })
-
-    test('should have mailto link on email button', async ({ page }) => {
-      const emailButton = page.locator(selectors.emailButton)
-
-      // emailButton is an anchor tag itself
-      const href = await emailButton.getAttribute('href')
-      expect(href).toContain('mailto:')
-    })
-
-    test('should have proper button styling', async ({ page }) => {
-      const emailButton = page.locator(selectors.emailButton)
-      await expect(emailButton).toBeVisible()
-
-      // Button should have proper classes (it's an anchor tag with button styling)
-      await expect(emailButton).toHaveClass(/bg-primary/)
-    })
-
-    test('should display buttons in flex layout', async ({ page }) => {
-      const buttonContainer = page.locator('.flex.flex-wrap.justify-center.gap-4')
-      await expect(buttonContainer).toBeVisible()
     })
   })
 
@@ -222,7 +179,6 @@ test.describe('About Me Page', () => {
       await expect(page.locator(selectors.aboutHero)).toBeVisible()
       await expect(page.locator(selectors.artistName)).toBeVisible()
       await expect(page.locator(selectors.skillsTitle)).toBeVisible()
-      await expect(page.locator(selectors.contactTitle)).toBeVisible()
     })
 
     test('should stack profile section on mobile', async ({ page }) => {
@@ -329,9 +285,6 @@ test.describe('About Me Page', () => {
 
       // Skills
       await expect(page.locator(selectors.skillsTitle)).toBeVisible()
-
-      // Contact
-      await expect(page.locator(selectors.contactTitle)).toBeVisible()
     })
 
     test('should have proper heading hierarchy', async ({ page }) => {
@@ -350,7 +303,6 @@ test.describe('About Me Page', () => {
       await expect(page.locator(selectors.aboutHero)).toBeVisible()
       await expect(page.locator(selectors.philosophyTitle)).toBeVisible()
       await expect(page.locator(selectors.skillsTitle)).toBeVisible()
-      await expect(page.locator(selectors.contactTitle)).toBeVisible()
     })
 
     test('should display consistent styling', async ({ page }) => {
@@ -410,12 +362,10 @@ test.describe('About Me Page', () => {
       }
     })
 
-    test('should have proper link text', async ({ page }) => {
-      const emailButton = page.locator(selectors.emailButton)
-      await expect(emailButton).toContainText('メールで連絡')
-
-      const snsButton = page.locator(selectors.snsButton)
-      await expect(snsButton).toContainText('SNS')
+    test('should have proper heading text', async ({ page }) => {
+      // Check for section headings with proper text
+      await expect(page.locator(selectors.philosophyTitle)).toContainText('制作理念')
+      await expect(page.locator(selectors.skillsTitle)).toContainText('スキル')
     })
 
     test('should be keyboard navigable', async ({ page }) => {

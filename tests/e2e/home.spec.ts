@@ -12,7 +12,7 @@ test.describe('Home Page', () => {
   test.describe('Page Load and Basic Elements', () => {
     test('should load home page successfully', async ({ page }) => {
       // Check page title
-      await expect(page).toHaveTitle(/アートポートフォリオ|Art Portfolio/)
+      await expect(page).toHaveTitle(/Aviary's Art Gallery/)
 
       // Check header is visible
       await expect(page.locator(selectors.header)).toBeVisible()
@@ -235,7 +235,7 @@ test.describe('Home Page', () => {
   })
 
   test.describe('Interactions', () => {
-    test('should show artwork card on hover (desktop)', async ({ page, isMobile }) => {
+    test('should show artwork info on hover (desktop fallback)', async ({ page, isMobile }) => {
       // Skip on mobile as hover behavior is different
       test.skip(isMobile, 'Hover tests are for desktop only')
 
@@ -243,15 +243,55 @@ test.describe('Home Page', () => {
       await page.evaluate(() => window.scrollTo(0, 1500))
       await page.waitForTimeout(1000)
 
-      // Find first visible card
-      const firstCard = page.locator('.relative.flex-shrink-0').first()
+      // Find a card that is not in the center (to test hover specifically)
+      const cards = page.locator('.relative.flex-shrink-0')
+      const secondCard = cards.nth(1)
 
       // Hover over the card
-      await firstCard.hover()
+      await secondCard.hover()
       await page.waitForTimeout(500)
 
-      // The card should be visible (it already is, but overlay should appear)
-      await expect(firstCard).toBeVisible()
+      // The card should be visible with overlay
+      await expect(secondCard).toBeVisible()
+    })
+
+    test('should show artwork info when card is centered in viewport', async ({ page }) => {
+      // Scroll to position where a card should be centered
+      await page.evaluate(() => window.scrollTo(0, 1000))
+      await page.waitForTimeout(1000)
+
+      // At least one card should have visible content (title, description)
+      // The centered card will have opacity-100 on its content overlay
+      const visibleOverlays = page.locator('.bg-gradient-to-t.from-background.opacity-100')
+      const count = await visibleOverlays.count()
+
+      // At least one overlay should be visible (the centered card)
+      expect(count).toBeGreaterThanOrEqual(1)
+    })
+
+    test('should navigate to artwork detail page on card click', async ({ page, context }) => {
+      // Scroll to make artworks visible
+      await page.evaluate(() => window.scrollTo(0, 1500))
+      await page.waitForTimeout(1000)
+
+      // Find a card to click
+      const card = page.locator('.relative.flex-shrink-0').first()
+      await expect(card).toBeVisible()
+
+      // Listen for new page (opens in new tab via window.open)
+      const [newPage] = await Promise.all([
+        context.waitForEvent('page'),
+        card.click()
+      ])
+
+      // Wait for new page to load
+      await newPage.waitForLoadState()
+
+      // Check URL is artwork detail page
+      expect(newPage.url()).toMatch(/\/artwork\/\d+/)
+
+      // Close new page
+      await newPage.close()
     })
 
     test('should navigate to artwork detail page on button click', async ({ page, context }) => {
@@ -259,7 +299,12 @@ test.describe('Home Page', () => {
       await page.evaluate(() => window.scrollTo(0, 1500))
       await page.waitForTimeout(1000)
 
-      // Find and click first "詳細を見る" button
+      // Find a card and hover to make button visible
+      const card = page.locator('.group.cursor-pointer').first()
+      await card.hover()
+      await page.waitForTimeout(500)
+
+      // Find and click first "詳細を見る" button (now visible after hover)
       const detailButton = page.locator(selectors.viewDetailsButton).first()
       await expect(detailButton).toBeVisible()
 
