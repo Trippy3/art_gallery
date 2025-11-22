@@ -1,16 +1,45 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import { ArtworkCard } from "./artwork-card";
 import { artworks } from "@/lib/data/artworks";
 
 export function HorizontalScrollGallery() {
   const containerRef = useRef<HTMLDivElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
   const [scrollProgress, setScrollProgress] = useState(0);
+  const [focusedIndex, setFocusedIndex] = useState(-1);
 
   const reversedArtworks = [...artworks].reverse();
   const totalArtworks = artworks.length;
+
+  // Initialize cardRefs array
+  if (cardRefs.current.length !== totalArtworks) {
+    cardRefs.current = Array(totalArtworks).fill(null);
+  }
+
+  // Calculate which card is closest to the screen center
+  const calculateFocusedIndex = useCallback(() => {
+    const screenCenter = window.innerWidth / 2;
+    let minDistance = Infinity;
+    let closestIndex = -1;
+
+    cardRefs.current.forEach((cardRef, index) => {
+      if (cardRef) {
+        const rect = cardRef.getBoundingClientRect();
+        const cardCenter = rect.left + rect.width / 2;
+        const distance = Math.abs(cardCenter - screenCenter);
+
+        if (distance < minDistance) {
+          minDistance = distance;
+          closestIndex = index;
+        }
+      }
+    });
+
+    return closestIndex;
+  }, []);
 
   useEffect(() => {
     const container = containerRef.current;
@@ -39,13 +68,17 @@ export function HorizontalScrollGallery() {
       const translateX = -progress * maxScroll;
 
       scrollContent.style.transform = `translateX(${translateX}px)`;
+
+      // Update focused index based on viewport center
+      const newFocusedIndex = calculateFocusedIndex();
+      setFocusedIndex(newFocusedIndex);
     };
 
     window.addEventListener("scroll", handleScroll);
     handleScroll(); // Initial call
 
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [calculateFocusedIndex]);
 
   const containerHeight =
     typeof window !== "undefined"
@@ -104,6 +137,9 @@ export function HorizontalScrollGallery() {
               return (
                 <div
                   key={artwork.id}
+                  ref={(el) => {
+                    cardRefs.current[index] = el;
+                  }}
                   id={`year-${artwork.year}`}
                   className="relative flex-shrink-0 flex flex-col items-center gap-4"
                 >
@@ -115,6 +151,7 @@ export function HorizontalScrollGallery() {
                           index={index}
                           scrollProgress={scrollProgress}
                           totalArtworks={totalArtworks}
+                          isFocused={index === focusedIndex}
                         />
                       </div>
                     )}
@@ -133,6 +170,7 @@ export function HorizontalScrollGallery() {
                           index={index}
                           scrollProgress={scrollProgress}
                           totalArtworks={totalArtworks}
+                          isFocused={index === focusedIndex}
                         />
                       </div>
                     )}

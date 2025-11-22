@@ -13,6 +13,7 @@ interface ArtworkCardProps {
   index: number;
   scrollProgress: number;
   totalArtworks: number;
+  isFocused?: boolean; // Whether this card is currently centered on screen
 }
 
 export function ArtworkCard({
@@ -20,8 +21,12 @@ export function ArtworkCard({
   index,
   scrollProgress,
   totalArtworks,
+  isFocused = false,
 }: ArtworkCardProps) {
   const [isHovered, setIsHovered] = useState(false);
+
+  // Show content when focused (scroll-based) or hovered (PC fallback)
+  const showContent = isFocused || isHovered;
 
   // Calculate individual card progress for staggered animations
   // Dynamic calculation based on total artworks count for future-proof scaling
@@ -58,17 +63,17 @@ export function ArtworkCard({
           className="object-cover transition-transform duration-700 group-hover:scale-110"
         />
 
-        {/* Overlay - PC: hover only, Mobile: hover only */}
+        {/* Overlay - shown when focused or hovered */}
         <div
           className={`absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent transition-opacity duration-500 ${
-            isHovered ? "opacity-100" : "opacity-0"
+            showContent ? "opacity-100" : "opacity-0"
           }`}
         />
 
-        {/* Content - slides up on hover */}
+        {/* Content - slides up when focused or hovered */}
         <div
           className={`absolute bottom-0 left-0 right-0 p-6 transition-all duration-500 ${
-            isHovered ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
+            showContent ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
           }`}
         >
           {/* Title */}
