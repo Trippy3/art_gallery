@@ -58,17 +58,17 @@ export function ArtworkCard({
           className="object-cover transition-transform duration-700 group-hover:scale-110"
         />
 
-        {/* Overlay */}
+        {/* Overlay - PC: hover only, Mobile: hover only */}
         <div
           className={`absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent transition-opacity duration-500 ${
-            isHovered ? "opacity-100" : "opacity-0 md:opacity-100"
+            isHovered ? "opacity-100" : "opacity-0"
           }`}
         />
 
-        {/* Content */}
+        {/* Content - slides up on hover */}
         <div
-          className={`absolute bottom-0 left-0 right-0 p-6 transition-transform duration-500 ${
-            isHovered ? "translate-y-0" : "translate-y-4 md:translate-y-0"
+          className={`absolute bottom-0 left-0 right-0 p-6 transition-all duration-500 ${
+            isHovered ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
           }`}
         >
           {/* Title */}
@@ -77,20 +77,12 @@ export function ArtworkCard({
           </h3>
 
           {/* Description */}
-          <p
-            className={`text-sm text-muted-foreground mb-4 leading-relaxed transition-opacity duration-500 ${
-              isHovered ? "opacity-100" : "opacity-0 md:opacity-100"
-            }`}
-          >
+          <p className="text-sm text-muted-foreground mb-4 leading-relaxed">
             {artwork.description}
           </p>
 
           {/* Tags */}
-          <div
-            className={`flex flex-wrap gap-2 mb-4 transition-opacity duration-500 ${
-              isHovered ? "opacity-100" : "opacity-0 md:opacity-100"
-            }`}
-          >
+          <div className="flex flex-wrap gap-2 mb-4">
             {artwork.tags.map((tag) => (
               <span
                 key={tag}
@@ -107,11 +99,7 @@ export function ArtworkCard({
             target="_blank"
             rel="noopener noreferrer"
           >
-            <Button
-              variant="outline"
-              size="sm"
-              className={`transition-opacity duration-500 ${isHovered ? "opacity-100" : "opacity-0 md:opacity-100"}`}
-            >
+            <Button variant="outline" size="sm">
               詳細を見る
               <ExternalLink className="ml-2 h-4 w-4" />
             </Button>
