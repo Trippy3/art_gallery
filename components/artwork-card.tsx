@@ -28,6 +28,11 @@ export function ArtworkCard({
   // Show content when focused (scroll-based) or hovered (PC fallback)
   const showContent = isFocused || isHovered;
 
+  // Handle card click to navigate to detail page (opens in new tab)
+  const handleCardClick = () => {
+    window.open(`/artwork/${artwork.id}`, '_blank', 'noopener,noreferrer');
+  };
+
   // Calculate individual card progress for staggered animations
   // Dynamic calculation based on total artworks count for future-proof scaling
   const staggerMultiplier = totalArtworks * 0.8; // Scale based on total count
@@ -53,6 +58,7 @@ export function ArtworkCard({
       }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
+      onClick={handleCardClick}
     >
       {/* Image */}
       <div className="relative w-full h-full">
@@ -98,11 +104,12 @@ export function ArtworkCard({
             ))}
           </div>
 
-          {/* View Details button */}
+          {/* View Details button - opens in new tab */}
           <Link
             href={`/artwork/${artwork.id}`}
             target="_blank"
             rel="noopener noreferrer"
+            onClick={(e) => e.stopPropagation()} // Prevent card click when button is clicked
           >
             <Button variant="outline" size="sm">
               詳細を見る
