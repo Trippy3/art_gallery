@@ -189,8 +189,6 @@ export function HorizontalScrollGallery() {
         : 4000
       : 4000;
 
-  const years = Array.from(new Set(artworks.map((a) => a.year))).sort();
-
   return (
     <section
       id="work"

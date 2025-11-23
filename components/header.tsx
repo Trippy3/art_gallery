@@ -23,11 +23,6 @@ export function Header() {
     }
   }
 
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" })
-    setIsMenuOpen(false)
-  }
-
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-sm border-b border-border">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -41,7 +36,7 @@ export function Header() {
               className="w-8 h-8"
             />
             <h1 className="text-lg font-medium text-foreground">
-              Aviary's Art Gallery
+              Aviary&apos;s Art Gallery
             </h1>
           </Link>
 
