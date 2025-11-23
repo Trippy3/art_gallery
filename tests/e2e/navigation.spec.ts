@@ -132,8 +132,8 @@ test.describe('Navigation', () => {
       // Wait for smooth scroll
       await page.waitForTimeout(1500)
 
-      // Check if first 2025 artwork marker (2025-01) is in viewport
-      const yearMarker = page.locator('[id="year-2025-01"]').first()
+      // Check if first 2025 artwork marker (2025-11, latest month in reversed order) is in viewport
+      const yearMarker = page.locator('[id^="year-2025"]').first()
       await expect(yearMarker).toBeInViewport()
     })
 
@@ -147,8 +147,8 @@ test.describe('Navigation', () => {
       // Wait for smooth scroll
       await page.waitForTimeout(1500)
 
-      // Check if first 2024 artwork marker (2024-03) is in viewport
-      const yearMarker = page.locator('[id="year-2024-03"]').first()
+      // Check if first 2024 artwork marker (2024-11, latest month in reversed order) is in viewport
+      const yearMarker = page.locator('[id^="year-2024"]').first()
       await expect(yearMarker).toBeInViewport()
     })
 
@@ -161,8 +161,8 @@ test.describe('Navigation', () => {
 
       await page.waitForTimeout(1500)
 
-      // Check if first 2023 artwork marker (2023-02) is in viewport
-      const yearMarker = page.locator('[id="year-2023-02"]').first()
+      // Check if first 2023 artwork marker (2023-10, latest month in reversed order) is in viewport
+      const yearMarker = page.locator('[id^="year-2023"]').first()
       await expect(yearMarker).toBeInViewport()
     })
 

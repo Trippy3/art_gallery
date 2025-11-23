@@ -469,6 +469,193 @@ test.describe('Home Page', () => {
     })
   })
 
+  test.describe('Timeline Year Jump', () => {
+    test('should jump to 2024 artwork when clicking 2024 year button', async ({ page }) => {
+      // Open menu
+      const menuButton = page.locator(selectors.menuButton)
+      await menuButton.click()
+      await page.waitForTimeout(300)
+
+      // Click 2024 year button
+      const year2024Button = page.locator(selectors.year2024Link)
+      await year2024Button.click()
+
+      // Wait for scroll animation
+      await page.waitForTimeout(1500)
+
+      // Check URL hash was set and then cleared
+      // The hash should be cleared after scroll completes
+      // But we can verify the scroll happened by checking viewport position
+
+      // Find the first 2024 artwork (2024-11 is the latest 2024 artwork in reversed order)
+      const artwork2024 = page.locator('[id^="year-2024"]').first()
+      await expect(artwork2024).toBeInViewport()
+    })
+
+    test('should jump to 2023 artwork when clicking 2023 year button', async ({ page }) => {
+      // Open menu
+      const menuButton = page.locator(selectors.menuButton)
+      await menuButton.click()
+      await page.waitForTimeout(300)
+
+      // Click 2023 year button
+      const year2023Button = page.locator(selectors.year2023Link)
+      await year2023Button.click()
+
+      // Wait for scroll animation
+      await page.waitForTimeout(1500)
+
+      // Find the first 2023 artwork
+      const artwork2023 = page.locator('[id^="year-2023"]').first()
+      await expect(artwork2023).toBeInViewport()
+    })
+
+    test('should jump to 2025 artwork when clicking 2025 year button', async ({ page }) => {
+      // First scroll to the end to test jumping back
+      await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight))
+      await page.waitForTimeout(1000)
+
+      // Open menu
+      const menuButton = page.locator(selectors.menuButton)
+      await menuButton.click()
+      await page.waitForTimeout(300)
+
+      // Click 2025 year button
+      const year2025Button = page.locator(selectors.year2025Link)
+      await year2025Button.click()
+
+      // Wait for scroll animation
+      await page.waitForTimeout(1500)
+
+      // Find the first 2025 artwork
+      const artwork2025 = page.locator('[id^="year-2025"]').first()
+      await expect(artwork2025).toBeInViewport()
+    })
+
+    test('should jump to 2022 artwork when clicking 2022 year button', async ({ page }) => {
+      // Open menu
+      const menuButton = page.locator(selectors.menuButton)
+      await menuButton.click()
+      await page.waitForTimeout(300)
+
+      // Click 2022 year button
+      const year2022Button = page.locator(selectors.year2022Link)
+      await year2022Button.click()
+
+      // Wait for scroll animation
+      await page.waitForTimeout(1500)
+
+      // Find the 2022 artwork
+      const artwork2022 = page.locator('[id^="year-2022"]').first()
+      await expect(artwork2022).toBeInViewport()
+    })
+
+    test('should close menu after clicking year button', async ({ page }) => {
+      // Open menu
+      const menuButton = page.locator(selectors.menuButton)
+      await menuButton.click()
+      await page.waitForTimeout(300)
+
+      // Verify menu is open
+      const menuDropdown = page.locator(selectors.menuDropdown)
+      await expect(menuDropdown).toBeVisible()
+
+      // Click year button
+      const year2024Button = page.locator(selectors.year2024Link)
+      await year2024Button.click()
+
+      // Menu should close
+      await page.waitForTimeout(500)
+      await expect(menuDropdown).not.toBeVisible()
+    })
+
+    test('should update URL hash when jumping to year', async ({ page }) => {
+      // Open menu
+      const menuButton = page.locator(selectors.menuButton)
+      await menuButton.click()
+      await page.waitForTimeout(300)
+
+      // Click 2024 year button
+      const year2024Button = page.locator(selectors.year2024Link)
+      await year2024Button.click()
+
+      // Hash should be set initially
+      await page.waitForTimeout(100)
+      expect(page.url()).toContain('#year-2024')
+
+      // After scroll completes, hash should be cleared
+      await page.waitForTimeout(1500)
+      expect(page.url()).not.toContain('#year-')
+    })
+
+    test('should work after scrolling through entire timeline', async ({ page }) => {
+      // Scroll to the end of timeline
+      await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight))
+      await page.waitForTimeout(1000)
+
+      // Open menu
+      const menuButton = page.locator(selectors.menuButton)
+      await menuButton.click()
+      await page.waitForTimeout(300)
+
+      // Jump to 2024
+      const year2024Button = page.locator(selectors.year2024Link)
+      await year2024Button.click()
+      await page.waitForTimeout(1500)
+
+      // Verify 2024 artwork is in viewport
+      const artwork2024 = page.locator('[id^="year-2024"]').first()
+      await expect(artwork2024).toBeInViewport()
+    })
+
+    test('should work with multiple consecutive jumps', async ({ page }) => {
+      const menuButton = page.locator(selectors.menuButton)
+
+      // Jump to 2022
+      await menuButton.click()
+      await page.waitForTimeout(300)
+      await page.locator(selectors.year2022Link).click()
+      await page.waitForTimeout(1500)
+
+      const artwork2022 = page.locator('[id^="year-2022"]').first()
+      await expect(artwork2022).toBeInViewport()
+
+      // Jump to 2025
+      await menuButton.click()
+      await page.waitForTimeout(300)
+      await page.locator(selectors.year2025Link).click()
+      await page.waitForTimeout(1500)
+
+      const artwork2025 = page.locator('[id^="year-2025"]').first()
+      await expect(artwork2025).toBeInViewport()
+
+      // Jump back to 2023
+      await menuButton.click()
+      await page.waitForTimeout(300)
+      await page.locator(selectors.year2023Link).click()
+      await page.waitForTimeout(1500)
+
+      const artwork2023 = page.locator('[id^="year-2023"]').first()
+      await expect(artwork2023).toBeInViewport()
+    })
+
+    test('should jump to the latest month of the selected year', async ({ page }) => {
+      // Open menu and click 2024
+      const menuButton = page.locator(selectors.menuButton)
+      await menuButton.click()
+      await page.waitForTimeout(300)
+
+      const year2024Button = page.locator(selectors.year2024Link)
+      await year2024Button.click()
+      await page.waitForTimeout(1500)
+
+      // In reversed order, the first 2024 artwork should be 2024-11 (the latest month)
+      // Check that the 2024-11 marker is visible (or close to center)
+      const artwork202411 = page.locator('[id="year-2024-11"]')
+      await expect(artwork202411).toBeInViewport()
+    })
+  })
+
   test.describe('Artwork Orientation Support', () => {
     test('should display portrait and landscape cards with different sizes', async ({ page }) => {
       // Scroll to make artworks visible

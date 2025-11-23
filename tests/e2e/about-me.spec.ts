@@ -248,27 +248,62 @@ test.describe('About Me Page', () => {
       await expect(menuDropdown).toBeVisible()
     })
 
-    test('should be able to scroll to years from about page', async ({ page }) => {
-      // Navigate back to home
-      const logo = page.locator(selectors.logo)
-
-      await Promise.all([
-        page.waitForNavigation({ waitUntil: 'networkidle' }),
-        logo.click()
-      ])
-
-      // Open menu and navigate to year
+    test('should navigate to home and jump to year via menu', async ({ page }) => {
+      // Open menu from About page
       const menuButton = page.locator(selectors.menuButton)
       await menuButton.click()
+      await page.waitForTimeout(300)
 
+      // Click 2024 year button - this should navigate to home with hash
       const year2024Button = page.locator(selectors.year2024Link)
       await year2024Button.click()
 
+      // Wait for navigation and scroll animation
+      await page.waitForURL('**/#year-2024')
       await page.waitForTimeout(1500)
 
-      // Should be scrolled to first 2024 artwork (year-2024-03)
-      const yearMarker = page.locator('[id="year-2024-03"]').first()
-      await expect(yearMarker).toBeInViewport()
+      // Should be on home page with 2024 artwork in viewport
+      // In reversed order, 2024-11 is the first 2024 artwork
+      const artwork2024 = page.locator('[id^="year-2024"]').first()
+      await expect(artwork2024).toBeInViewport()
+    })
+
+    test('should jump to 2025 from about page', async ({ page }) => {
+      // Open menu
+      const menuButton = page.locator(selectors.menuButton)
+      await menuButton.click()
+      await page.waitForTimeout(300)
+
+      // Click 2025 year button
+      const year2025Button = page.locator(selectors.year2025Link)
+      await year2025Button.click()
+
+      // Wait for navigation and scroll
+      await page.waitForURL('**/#year-2025')
+      await page.waitForTimeout(1500)
+
+      // Should be on home page with 2025 artwork in viewport
+      const artwork2025 = page.locator('[id^="year-2025"]').first()
+      await expect(artwork2025).toBeInViewport()
+    })
+
+    test('should jump to 2022 from about page', async ({ page }) => {
+      // Open menu
+      const menuButton = page.locator(selectors.menuButton)
+      await menuButton.click()
+      await page.waitForTimeout(300)
+
+      // Click 2022 year button
+      const year2022Button = page.locator(selectors.year2022Link)
+      await year2022Button.click()
+
+      // Wait for navigation and scroll
+      await page.waitForURL('**/#year-2022')
+      await page.waitForTimeout(1500)
+
+      // Should be on home page with 2022 artwork in viewport
+      const artwork2022 = page.locator('[id^="year-2022"]').first()
+      await expect(artwork2022).toBeInViewport()
     })
   })
 
