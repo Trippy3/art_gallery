@@ -152,3 +152,26 @@ To add artworks, edit the `artworks` array in `lib/data/artworks.ts`. Each artwo
 
 ### Theme Customization
 Theme colors are defined using CSS variables in `app/globals.css`. Modify the `:root` and `.dark` selectors to change the color scheme.
+
+### OGP (Open Graph Protocol) Configuration
+Dynamic OGP metadata is configured for social media sharing:
+
+**Files involved**:
+- `app/layout.tsx`: Sets `metadataBase` for absolute URL resolution
+- `app/page.tsx`: Exports `metadata` with latest artwork image for home page
+- `app/artwork/[id]/page.tsx`: Uses `generateMetadata()` for dynamic per-artwork OGP
+
+**OGP image behavior**:
+- Home page: Automatically uses the most recent artwork (sorted by `year` descending)
+- Artwork detail pages: Uses the specific artwork's image
+
+**Base URL resolution** (in `layout.tsx`):
+```typescript
+const baseUrl = process.env.VERCEL_URL
+  ? `https://${process.env.VERCEL_URL}`
+  : process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+```
+
+**Environment variables**:
+- `VERCEL_URL`: Auto-set by Vercel (preferred)
+- `NEXT_PUBLIC_BASE_URL`: For custom domain deployments
