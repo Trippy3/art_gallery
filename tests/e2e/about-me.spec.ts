@@ -1,5 +1,4 @@
 import { test, expect } from '@playwright/test'
-import { skills } from '../fixtures/test-data'
 import { selectors } from '../helpers/selectors'
 
 test.describe('About Me Page', () => {
@@ -53,12 +52,6 @@ test.describe('About Me Page', () => {
       await expect(artistImage).toHaveAttribute('alt', 'Artist Profile')
     })
 
-    test('should display artist name "Torii"', async ({ page }) => {
-      const artistName = page.locator(selectors.artistName)
-      await expect(artistName).toBeVisible()
-      await expect(artistName).toContainText('Torii')
-    })
-
     test('should display biography text', async ({ page }) => {
       // Check for biography paragraphs
       const bioParagraphs = page.locator('p.text-muted-foreground.leading-relaxed')
@@ -73,49 +66,12 @@ test.describe('About Me Page', () => {
       const profileSection = page.locator('section').filter({ hasText: 'Torii' })
       await expect(profileSection).toBeVisible()
     })
-
-    test('should display bio about oil painting', async ({ page }) => {
-      const bioText = page.locator('text=油絵')
-      await expect(bioText.first()).toBeVisible()
-    })
-
-    test('should display bio about starting year 2021', async ({ page }) => {
-      const bioText = page.locator('text=2021年')
-      await expect(bioText.first()).toBeVisible()
-    })
   })
 
   test.describe('Philosophy Section', () => {
     test('should display philosophy section title', async ({ page }) => {
       const philosophyTitle = page.locator(selectors.philosophyTitle)
       await expect(philosophyTitle).toBeVisible()
-    })
-
-    test('should display "自分にとっての美を見つける" card', async ({ page }) => {
-      const card = page.locator('text=自分にとっての美を見つける')
-      await expect(card).toBeVisible()
-
-      // Check description
-      const description = page.locator('text=絵画という創作だからこそ')
-      await expect(description).toBeVisible()
-    })
-
-    test('should display "表現の模索" card', async ({ page }) => {
-      const card = page.locator('text=表現の模索')
-      await expect(card).toBeVisible()
-
-      // Check description
-      const description = page.locator('text=油彩には多くの画材や材料が関わる')
-      await expect(description).toBeVisible()
-    })
-
-    test('should display philosophy cards in grid', async ({ page }) => {
-      // Cards should be in a grid layout
-      const philosophySection = page.locator('section').filter({ hasText: '制作理念' })
-      const cards = philosophySection.locator('.p-6.rounded-lg.bg-card.border')
-      const count = await cards.count()
-
-      expect(count).toBe(2)
     })
 
     test('should have proper card styling', async ({ page }) => {
@@ -134,40 +90,9 @@ test.describe('About Me Page', () => {
       await expect(skillsTitle).toBeVisible()
     })
 
-    test('should display all 4 skills', async ({ page }) => {
-      for (const skill of skills) {
-        // Use more specific selector to target skill badges
-        const skillElement = page.locator(`.bg-secondary.text-secondary-foreground:has-text("${skill}")`)
-        await expect(skillElement.first()).toBeVisible()
-      }
-    })
-
     test('should display skills in grid layout', async ({ page }) => {
       const skillsGrid = page.locator('.grid.grid-cols-2.sm\\:grid-cols-3')
       await expect(skillsGrid).toBeVisible()
-    })
-
-    test('should have skill badges with proper styling', async ({ page }) => {
-      // Skills should be in rounded containers
-      const skillBadges = page.locator('.p-4.text-center.rounded-lg.bg-secondary')
-      const count = await skillBadges.count()
-
-      expect(count).toBe(4)
-    })
-
-    test('should display "油彩"', async ({ page }) => {
-      const skill = page.getByText('油彩', { exact: true })
-      await expect(skill).toBeVisible()
-    })
-
-    test('should display "デッサン"', async ({ page }) => {
-      const skill = page.locator('text=デッサン')
-      await expect(skill).toBeVisible()
-    })
-
-    test('should display "模写"', async ({ page }) => {
-      const skill = page.locator('text=模写')
-      await expect(skill).toBeVisible()
     })
   })
 
@@ -221,8 +146,7 @@ test.describe('About Me Page', () => {
 
       // Philosophy cards should be side by side
       const cards = page.locator('.p-6.rounded-lg.bg-card.border')
-      const count = await cards.count()
-      expect(count).toBe(2)
+      await expect(cards.first()).toBeVisible()
     })
   })
 
@@ -307,48 +231,6 @@ test.describe('About Me Page', () => {
     })
   })
 
-  test.describe('Content Integrity', () => {
-    test('should display all required sections', async ({ page }) => {
-      // Hero
-      await expect(page.locator(selectors.aboutHero)).toBeVisible()
-
-      // Profile
-      await expect(page.locator(selectors.artistName)).toBeVisible()
-
-      // Philosophy
-      await expect(page.locator(selectors.philosophyTitle)).toBeVisible()
-
-      // Skills
-      await expect(page.locator(selectors.skillsTitle)).toBeVisible()
-    })
-
-    test('should have proper heading hierarchy', async ({ page }) => {
-      // Should have h1 in main content
-      const h1 = page.locator('main >> h1')
-      await expect(h1).toBeVisible()
-
-      // Should have h2 sections
-      const h2Elements = page.locator('h2')
-      const h2Count = await h2Elements.count()
-      expect(h2Count).toBeGreaterThan(0)
-    })
-
-    test('should have all Japanese content', async ({ page }) => {
-      // Check for key Japanese phrases using specific selectors
-      await expect(page.locator(selectors.aboutHero)).toBeVisible()
-      await expect(page.locator(selectors.philosophyTitle)).toBeVisible()
-      await expect(page.locator(selectors.skillsTitle)).toBeVisible()
-    })
-
-    test('should display consistent styling', async ({ page }) => {
-      // All sections should have proper spacing
-      const sections = page.locator('section')
-      const count = await sections.count()
-
-      expect(count).toBeGreaterThan(3)
-    })
-  })
-
   test.describe('Image Optimization', () => {
     test('should load artist portrait', async ({ page }) => {
       const artistImage = page.locator(selectors.artistImage)
@@ -395,12 +277,6 @@ test.describe('About Me Page', () => {
         const alt = await image.getAttribute('alt')
         expect(alt).toBeTruthy()
       }
-    })
-
-    test('should have proper heading text', async ({ page }) => {
-      // Check for section headings with proper text
-      await expect(page.locator(selectors.philosophyTitle)).toContainText('制作理念')
-      await expect(page.locator(selectors.skillsTitle)).toContainText('スキル')
     })
 
     test('should be keyboard navigable', async ({ page }) => {

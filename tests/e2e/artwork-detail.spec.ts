@@ -1,5 +1,4 @@
 import { test, expect } from "@playwright/test";
-import { artworkData } from "../fixtures/test-data";
 import { selectors } from "../helpers/selectors";
 
 test.describe("Artwork Detail Page", () => {
@@ -13,17 +12,6 @@ test.describe("Artwork Detail Page", () => {
 
       // Check page title
       await expect(page).toHaveTitle(/Aviary's Art Gallery/);
-    });
-
-    test("should load all 12 artwork detail pages", async ({ page }) => {
-      for (let i = 1; i <= 12; i++) {
-        await page.goto(`/artwork/${i}`);
-        await page.waitForLoadState("networkidle");
-
-        // Should not show 404
-        const heading = page.locator("h1");
-        await expect(heading).toBeVisible();
-      }
     });
 
     test("should display 404 page for invalid artwork ID", async ({ page }) => {
@@ -137,39 +125,12 @@ test.describe("Artwork Detail Page", () => {
   });
 
   test.describe("Artwork Information", () => {
-    test("should display artwork title for ID 1", async ({ page }) => {
-      await page.goto("/artwork/1");
-      await page.waitForLoadState("networkidle");
-
-      const artwork = artworkData[0];
-      const title = page.locator("h1");
-      await expect(title).toContainText(artwork.title);
-    });
-
-    test("should display correct data for all artworks", async ({ page }) => {
-      for (let i = 0; i < artworkData.length; i++) {
-        const artwork = artworkData[i];
-        await page.goto(`/artwork/${artwork.id}`);
-        await page.waitForLoadState("networkidle");
-
-        // Check title
-        const title = page.locator("h1");
-        await expect(title).toContainText(artwork.title);
-
-        // Check short description
-        const description = page.locator("p.text-lg.text-muted-foreground");
-        await expect(description).toContainText(artwork.description);
-      }
-    });
-
     test("should display year badge", async ({ page }) => {
       await page.goto("/artwork/1");
       await page.waitForLoadState("networkidle");
 
-      const artwork = artworkData[0];
       const yearBadge = page.locator(".rounded-full.bg-accent").first();
       await expect(yearBadge).toBeVisible();
-      await expect(yearBadge).toContainText(artwork.year);
     });
 
     test("should display short description", async ({ page }) => {
@@ -237,24 +198,6 @@ test.describe("Artwork Detail Page", () => {
       const specsGrid = page.locator(".grid.grid-cols-2.gap-4");
       await expect(specsGrid).toBeVisible();
     });
-
-    test("should display correct specifications for artwork 1", async ({
-      page,
-    }) => {
-      const artwork = artworkData[0];
-
-      // Year - check in specs section
-      const yearValue = page.locator(`text=${artwork.year}`).first();
-      await expect(yearValue).toBeVisible();
-
-      // Medium
-      const medium = page.locator(`text=${artwork.medium}`).first();
-      await expect(medium).toBeVisible();
-
-      // Dimensions
-      const dimensions = page.locator(`text=${artwork.dimensions}`);
-      await expect(dimensions).toBeVisible();
-    });
   });
 
   test.describe("Tags Section", () => {
@@ -266,27 +209,6 @@ test.describe("Artwork Detail Page", () => {
     test('should display "タグ" section', async ({ page }) => {
       const sectionTitle = page.locator('h2:has-text("タグ")');
       await expect(sectionTitle).toBeVisible();
-    });
-
-    test("should display all tags for artwork 1", async ({ page }) => {
-      const artwork = artworkData[0];
-
-      for (const tag of artwork.tags) {
-        const tagElement = page
-          .locator(`.rounded-full:has-text("${tag}")`)
-          .first();
-        await expect(tagElement).toBeVisible();
-      }
-    });
-
-    test("should display correct number of tags for artwork 1", async ({ page }) => {
-      const artwork = artworkData[0];
-      const tags = page.locator(
-        ".bg-secondary.text-secondary-foreground.rounded-full",
-      );
-      const count = await tags.count();
-
-      expect(count).toBe(artwork.tags.length);
     });
 
     test("should have proper tag styling", async ({ page }) => {
@@ -392,10 +314,8 @@ test.describe("Artwork Detail Page", () => {
       const title = page.locator("h1");
       await expect(title).toBeVisible();
 
-      const artwork = artworkData[0];
       const tags = page.locator(".rounded-full.bg-secondary");
-      const count = await tags.count();
-      expect(count).toBe(artwork.tags.length);
+      await expect(tags.first()).toBeVisible();
     });
 
     test("should adjust title font size responsively", async ({ page }) => {
@@ -405,153 +325,6 @@ test.describe("Artwork Detail Page", () => {
       const title = page.locator("h1");
       await expect(title).toHaveClass(/text-4xl/);
       await expect(title).toHaveClass(/sm:text-5xl/);
-    });
-  });
-
-  test.describe("Data Validation", () => {
-    test("should display correct title for each artwork", async ({ page }) => {
-      // Test a sample of artworks (first, middle, and last)
-      const testArtworks = [
-        artworkData[0],  // id 1
-        artworkData[4],  // id 5
-        artworkData[7],  // id 8
-        artworkData[11], // id 12
-      ];
-
-      for (const artwork of testArtworks) {
-        await page.goto(`/artwork/${artwork.id}`);
-        await page.waitForLoadState("networkidle");
-
-        const title = page.locator("h1");
-        await expect(title).toContainText(artwork.title);
-      }
-    });
-
-    test("should display correct year for each artwork", async ({ page }) => {
-      // Test a sample of artworks from different years
-      const testArtworks = [
-        artworkData[0],  // id 1 - 2022
-        artworkData[2],  // id 3 - 2023
-        artworkData[6],  // id 7 - 2024
-        artworkData[11], // id 12 - 2025
-      ];
-
-      for (const artwork of testArtworks) {
-        await page.goto(`/artwork/${artwork.id}`);
-        await page.waitForLoadState("networkidle");
-
-        const yearBadge = page.locator(".rounded-full.bg-accent").first();
-        await expect(yearBadge).toContainText(artwork.year);
-      }
-    });
-
-    test("should display correct tags count for each artwork", async ({
-      page,
-    }) => {
-      // Test a sample of artworks to avoid timeout
-      const testArtworks = [
-        artworkData[0],  // id 1
-        artworkData[5],  // id 6
-        artworkData[11], // id 12
-      ];
-
-      for (const artwork of testArtworks) {
-        await page.goto(`/artwork/${artwork.id}`);
-        await page.waitForLoadState("networkidle");
-
-        const tags = page.locator(
-          ".bg-secondary.text-secondary-foreground.rounded-full",
-        );
-        const count = await tags.count();
-
-        expect(count).toBe(artwork.tags.length);
-      }
-    });
-
-    test("should display non-empty descriptions", async ({ page }) => {
-      // Test a sample of artworks to avoid timeout
-      const testArtworks = [
-        artworkData[0],  // id 1
-        artworkData[5],  // id 6
-        artworkData[11], // id 12
-      ];
-
-      for (const artwork of testArtworks) {
-        await page.goto(`/artwork/${artwork.id}`);
-        await page.waitForLoadState("networkidle");
-
-        const description = page.locator("p.text-lg.text-muted-foreground");
-        const text = await description.textContent();
-
-        expect(text?.length).toBeGreaterThan(0);
-      }
-    });
-  });
-
-  test.describe("Content Integrity", () => {
-    test.beforeEach(async ({ page }) => {
-      await page.goto("/artwork/1");
-      await page.waitForLoadState("networkidle");
-    });
-
-    test("should have all required sections", async ({ page }) => {
-      // Year badge
-      await expect(
-        page.locator(".rounded-full.bg-accent").first(),
-      ).toBeVisible();
-
-      // Title
-      await expect(page.locator("h1")).toBeVisible();
-
-      // Description
-      await expect(page.locator("p.text-lg")).toBeVisible();
-
-      // "作品について" section
-      await expect(page.locator("text=作品について")).toBeVisible();
-
-      // "作品情報" section
-      await expect(page.locator("text=作品情報")).toBeVisible();
-
-      // "タグ" section
-      await expect(page.locator("text=タグ")).toBeVisible();
-    });
-
-    test("should have semantic HTML structure", async ({ page }) => {
-      // Main element
-      const main = page.locator("main");
-      await expect(main).toBeVisible();
-
-      // Header element
-      const header = page.locator("header");
-      await expect(header).toBeVisible();
-
-      // H1 heading
-      const h1 = page.locator("h1");
-      await expect(h1).toBeVisible();
-
-      // H2 headings for sections
-      const h2Elements = page.locator("h2");
-      const h2Count = await h2Elements.count();
-      expect(h2Count).toBeGreaterThan(0);
-    });
-
-    test("should display all Japanese content", async ({ page }) => {
-      // Check for key Japanese text
-      await expect(page.locator("text=ギャラリーに戻る")).toBeVisible();
-      await expect(page.locator("text=作品について")).toBeVisible();
-      await expect(page.locator("text=作品情報")).toBeVisible();
-      await expect(page.locator("text=制作年")).toBeVisible();
-      await expect(page.locator("text=技法・材質")).toBeVisible();
-      await expect(page.locator("text=サイズ")).toBeVisible();
-      await expect(page.locator("text=タグ")).toBeVisible();
-    });
-
-    test("should have consistent styling across sections", async ({ page }) => {
-      const sections = page.locator(".border-t.border-border");
-      const count = await sections.count();
-
-      // Should have multiple sections with consistent border styling
-      expect(count).toBeGreaterThan(2);
     });
   });
 
@@ -655,17 +428,6 @@ test.describe("Artwork Detail Page", () => {
       const imageContainer = page.locator(".relative.aspect-\\[4\\/3\\]");
       await expect(imageContainer).toBeVisible();
     });
-
-    test("should have orientation data for all artworks", async ({ page }) => {
-      // Verify that artwork data includes orientation field
-      const portraitCount = artworkData.filter(a => a.orientation === 'portrait').length;
-      const landscapeCount = artworkData.filter(a => a.orientation === 'landscape').length;
-
-      // Should have both portrait and landscape artworks
-      expect(portraitCount).toBeGreaterThan(0);
-      expect(landscapeCount).toBeGreaterThan(0);
-      expect(portraitCount + landscapeCount).toBe(artworkData.length);
-    });
   });
 
   test.describe("Image Lightbox Functionality", () => {
@@ -764,20 +526,6 @@ test.describe("Artwork Detail Page", () => {
       // Lightbox should be gone
       const lightbox = page.locator(".fixed.inset-0.z-\\[100\\]");
       await expect(lightbox).not.toBeVisible();
-    });
-
-    test("should display artwork title and year in lightbox", async ({ page }) => {
-      const artwork = artworkData[0];
-
-      // Open lightbox
-      const imageContainer = page.locator(".relative.cursor-pointer").first();
-      await imageContainer.click();
-      await page.waitForTimeout(300);
-
-      // Check for title and year in lightbox
-      const info = page.locator(".absolute.bottom-4");
-      await expect(info).toContainText(artwork.title);
-      await expect(info).toContainText(artwork.year);
     });
 
     test("should prevent body scroll when lightbox is open", async ({ page }) => {

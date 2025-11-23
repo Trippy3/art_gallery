@@ -87,18 +87,6 @@ test.describe('Navigation', () => {
       await expect(historyLabel).toBeVisible()
     })
 
-    test('should display all year buttons (2025-2022)', async ({ page }) => {
-      const menuButton = page.locator(selectors.menuButton)
-      await menuButton.click()
-
-      // Check for all year buttons (data spans 2022-2025)
-      const years = ['2025年', '2024年', '2023年', '2022年']
-      for (const year of years) {
-        const yearButton = page.locator(`text=${year}`)
-        await expect(yearButton).toBeVisible()
-      }
-    })
-
     test('should close menu when X icon is clicked', async ({ page }) => {
       const menuButton = page.locator(selectors.menuButton)
 

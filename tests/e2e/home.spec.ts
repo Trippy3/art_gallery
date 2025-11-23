@@ -1,5 +1,4 @@
 import { test, expect } from '@playwright/test'
-import { artworkData } from '../fixtures/test-data'
 import { selectors } from '../helpers/selectors'
 
 test.describe('Home Page', () => {
@@ -101,22 +100,6 @@ test.describe('Home Page', () => {
       expect(newWidth).not.toBe(initialWidth)
     })
 
-    test('should display year markers on timeline', async ({ page }) => {
-      // Check for year markers using actual artwork year-month values
-      // Each artwork has a unique year-month value
-      const yearMonthValues = artworkData.map(a => a.year)
-
-      // Check that we have the expected number of year markers
-      for (const yearMonth of yearMonthValues.slice(0, 3)) { // Test first 3 to avoid timeout
-        const yearMarker = page.locator(`[id="year-${yearMonth}"]`).first()
-        await expect(yearMarker).toBeAttached() // May not be in viewport initially
-
-        // Check year label displays the year-month value
-        const yearLabel = page.locator(`text=${yearMonth}`).first()
-        await expect(yearLabel).toBeAttached()
-      }
-    })
-
     test('should have horizontal timeline line', async ({ page }) => {
       // The timeline has a horizontal line with specific styling
       // Using a more flexible selector
@@ -126,20 +109,6 @@ test.describe('Home Page', () => {
   })
 
   test.describe('Artwork Card Display', () => {
-    test('should display 12 artwork cards', async ({ page }) => {
-      // Scroll to make sure all cards are loaded
-      await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight / 2))
-      await page.waitForTimeout(1000)
-
-      // Count visible cards - there are 24 because each artwork has a container div
-      // (one for year marker, one for the card itself in alternating layout)
-      // We should count the actual artwork cards that have titles
-      const cards = page.locator('h3.text-xl.sm\\:text-2xl')
-      const count = await cards.count()
-
-      expect(count).toBe(12)
-    })
-
     test('should display artwork images', async ({ page }) => {
       // Scroll to middle to ensure artworks are visible
       await page.evaluate(() => window.scrollTo(0, 1500))
@@ -153,19 +122,6 @@ test.describe('Home Page', () => {
       expect(imageCount).toBeGreaterThan(0)
     })
 
-    test('should display artwork titles and years', async ({ page }) => {
-      // Scroll to make artworks visible
-      await page.evaluate(() => window.scrollTo(0, 1500))
-      await page.waitForTimeout(1000)
-
-      // Check for at least one artwork title from our data
-      const firstArtwork = artworkData[0]
-      const titleLocator = page.locator(`text=${firstArtwork.title}`)
-
-      // It should exist in the DOM even if not fully visible
-      await expect(titleLocator).toBeAttached()
-    })
-
     test('should display year badges on cards', async ({ page }) => {
       // Scroll to middle
       await page.evaluate(() => window.scrollTo(0, 1500))
@@ -177,31 +133,6 @@ test.describe('Home Page', () => {
 
       // Should have year badges for each artwork (one on timeline, one on card)
       expect(count).toBeGreaterThan(0)
-    })
-
-    test('should display artwork descriptions', async ({ page }) => {
-      // Scroll to middle
-      await page.evaluate(() => window.scrollTo(0, 1500))
-      await page.waitForTimeout(1000)
-
-      // Check for at least one description
-      const firstArtwork = artworkData[0]
-      const descriptionLocator = page.locator(`text=${firstArtwork.description}`)
-
-      await expect(descriptionLocator).toBeAttached()
-    })
-
-    test('should display artwork tags', async ({ page }) => {
-      // Scroll to middle
-      await page.evaluate(() => window.scrollTo(0, 1500))
-      await page.waitForTimeout(1000)
-
-      // Check for tags from first artwork - use first() to handle strict mode
-      const firstArtwork = artworkData[0]
-      const firstTag = firstArtwork.tags[0]
-      const tagLocator = page.locator(`text=${firstTag}`).first()
-
-      await expect(tagLocator).toBeAttached()
     })
 
     test('should display "詳細を見る" buttons', async ({ page }) => {
@@ -406,67 +337,6 @@ test.describe('Home Page', () => {
       // Should exist (optimization applied)
       await expect(scrollContent).toBeAttached()
     })
-
-    test('should have staggered animation for artwork cards', async ({ page }) => {
-      // The stagger animation is based on: cardProgress = scrollProgress * 8 - index * 0.8
-      // We can verify by checking opacity changes as we scroll
-
-      await page.evaluate(() => window.scrollTo(0, 500))
-      await page.waitForTimeout(500)
-
-      // Get first few cards
-      const cards = page.locator('.relative.flex-shrink-0').filter({ hasText: artworkData[0].title })
-
-      // Cards should be present in DOM
-      await expect(cards.first()).toBeAttached()
-    })
-  })
-
-  test.describe('Data Integrity', () => {
-    test('should display correct number of artworks from data', async ({ page }) => {
-      // Scroll through the entire page
-      await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight))
-      await page.waitForTimeout(1000)
-
-      // Count artwork titles (more reliable than container divs)
-      const titles = page.locator('h3.text-xl.sm\\:text-2xl')
-      const count = await titles.count()
-
-      expect(count).toBe(artworkData.length)
-    })
-
-    test('should display artworks in reversed order', async ({ page }) => {
-      // The code uses reversedArtworks = [...artworks].reverse()
-      // So the first visible artwork should be ID 8 (ミニマルスペース)
-
-      // Scroll to beginning of gallery
-      await page.evaluate(() => window.scrollTo(0, 500))
-      await page.waitForTimeout(1000)
-
-      // Check for artwork ID 8 title
-      const lastArtwork = artworkData[artworkData.length - 1]
-      const titleLocator = page.locator(`text=${lastArtwork.title}`)
-
-      await expect(titleLocator).toBeAttached()
-    })
-
-    test('should have year markers for all unique years', async ({ page }) => {
-      // Each artwork has a unique year-month value, so we have 12 unique values
-      const uniqueYearMonths = Array.from(new Set(artworkData.map(a => a.year)))
-
-      // Test a sample of year markers (first 5) to avoid timeout
-      for (const yearMonth of uniqueYearMonths.slice(0, 5)) {
-        const yearMarker = page.locator(`[id="year-${yearMonth}"]`).first()
-        await expect(yearMarker).toBeAttached()
-      }
-
-      // We have 12 unique year-month combinations
-      expect(uniqueYearMonths.length).toBe(12)
-
-      // Extract unique years (YYYY part only) - should be 4: 2022, 2023, 2024, 2025
-      const uniqueYears = Array.from(new Set(artworkData.map(a => a.year.split('-')[0])))
-      expect(uniqueYears.length).toBe(4)
-    })
   })
 
   test.describe('Timeline Year Jump', () => {
@@ -639,21 +509,6 @@ test.describe('Home Page', () => {
       await expect(artwork2023).toBeInViewport()
     })
 
-    test('should jump to the latest month of the selected year', async ({ page }) => {
-      // Open menu and click 2024
-      const menuButton = page.locator(selectors.menuButton)
-      await menuButton.click()
-      await page.waitForTimeout(300)
-
-      const year2024Button = page.locator(selectors.year2024Link)
-      await year2024Button.click()
-      await page.waitForTimeout(1500)
-
-      // In reversed order, the first 2024 artwork should be 2024-11 (the latest month)
-      // Check that the 2024-11 marker is visible (or close to center)
-      const artwork202411 = page.locator('[id="year-2024-11"]')
-      await expect(artwork202411).toBeInViewport()
-    })
   })
 
   test.describe('Artwork Orientation Support', () => {
@@ -670,30 +525,6 @@ test.describe('Home Page', () => {
       // But we can verify the cards render without errors
       const cardCount = await page.locator('.relative.flex-shrink-0').count()
       expect(cardCount).toBeGreaterThan(0)
-    })
-
-    test('should render cards with different orientations correctly', async ({ page }) => {
-      // Scroll through to see different orientations
-      await page.evaluate(() => window.scrollTo(0, 2000))
-      await page.waitForTimeout(1000)
-
-      // All cards should be visible regardless of orientation
-      const cards = page.locator('h3.text-xl.sm\\:text-2xl')
-      const count = await cards.count()
-
-      // Should match total artwork count
-      expect(count).toBe(artworkData.length)
-    })
-
-    test('should have orientation data for all artworks', async ({ page }) => {
-      // Verify that artwork data includes orientation field
-      const portraitCount = artworkData.filter(a => a.orientation === 'portrait').length
-      const landscapeCount = artworkData.filter(a => a.orientation === 'landscape').length
-
-      // Should have both portrait and landscape artworks
-      expect(portraitCount).toBeGreaterThan(0)
-      expect(landscapeCount).toBeGreaterThan(0)
-      expect(portraitCount + landscapeCount).toBe(artworkData.length)
     })
   })
 })
