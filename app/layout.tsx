@@ -6,7 +6,13 @@ import { Analytics } from "@vercel/analytics/next";
 import { Suspense } from "react";
 import "./globals.css";
 
+// OGP画像の絶対URL生成用のベースURL
+const baseUrl = process.env.VERCEL_URL
+  ? `https://${process.env.VERCEL_URL}`
+  : process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+
 export const metadata: Metadata = {
+  metadataBase: new URL(baseUrl),
   title: "Aviary's Art Gallery",
   description: "これまでに制作したアートワークを紹介します",
   generator: "v0.app",
