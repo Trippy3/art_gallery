@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { Menu, X } from "lucide-react"
 import Link from "next/link"
+import Image from "next/image"
 import { useRouter, usePathname } from "next/navigation"
 
 export function Header() {
@@ -31,8 +32,15 @@ export function Header() {
     <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-sm border-b border-border">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          <Link href="/" className="flex-shrink-0">
-            <h1 className="text-lg font-medium text-foreground hover:text-foreground/80 transition-colors">
+          <Link href="/" className="flex-shrink-0 flex items-center gap-2 hover:opacity-80 transition-opacity">
+            <Image
+              src="/aviary_logo_1.png"
+              alt="Aviary Logo"
+              width={32}
+              height={32}
+              className="w-8 h-8"
+            />
+            <h1 className="text-lg font-medium text-foreground">
               Aviary's Art Gallery
             </h1>
           </Link>
