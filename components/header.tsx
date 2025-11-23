@@ -3,20 +3,22 @@
 import { useState } from "react"
 import { Menu, X } from "lucide-react"
 import Link from "next/link"
-import { artworks } from "@/lib/data/artworks"
+import { useRouter, usePathname } from "next/navigation"
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const router = useRouter()
+  const pathname = usePathname()
 
   const scrollToYear = (year: number) => {
-    // Find the first artwork whose year starts with this year
-    const firstArtworkOfYear = artworks.find(artwork => artwork.year.startsWith(year.toString()))
-    if (firstArtworkOfYear) {
-      const element = document.getElementById(`year-${firstArtworkOfYear.year}`)
-      if (element) {
-        element.scrollIntoView({ behavior: "smooth", block: "center" })
-        setIsMenuOpen(false)
-      }
+    setIsMenuOpen(false)
+
+    if (pathname === "/") {
+      // ホームページにいる場合はハッシュを直接設定（hashchangeが自動発火）
+      window.location.hash = `year-${year}`
+    } else {
+      // 他のページからはホームに遷移
+      router.push(`/#year-${year}`)
     }
   }
 

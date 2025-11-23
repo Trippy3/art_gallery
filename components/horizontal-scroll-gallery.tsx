@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useEffect, useRef, useState, useCallback, useMemo } from "react";
 import { ArtworkCard } from "./artwork-card";
 import { artworks } from "@/lib/data/artworks";
 
@@ -10,8 +10,10 @@ export function HorizontalScrollGallery() {
   const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
   const [scrollProgress, setScrollProgress] = useState(0);
   const [focusedIndex, setFocusedIndex] = useState(-1);
+  const isScrollingToYear = useRef(false);
 
-  const reversedArtworks = [...artworks].reverse();
+  // メモ化して再レンダリング時に同じ参照を維持
+  const reversedArtworks = useMemo(() => [...artworks].reverse(), []);
   const totalArtworks = artworks.length;
 
   // Initialize cardRefs array
@@ -40,6 +42,102 @@ export function HorizontalScrollGallery() {
 
     return closestIndex;
   }, []);
+
+  // 指定年にスクロールする関数
+  const scrollToYear = useCallback((year: number, retryCount = 0) => {
+    const container = containerRef.current;
+    const scrollContent = scrollRef.current;
+
+    // refsが準備できていない場合はリトライ
+    if (!container || !scrollContent) {
+      if (retryCount < 5) {
+        setTimeout(() => scrollToYear(year, retryCount + 1), 100);
+      }
+      return;
+    }
+
+    // 指定年の最初の作品（その年の最新月）を見つける
+    // artworksのyearは "2024-03" のような形式なので startsWith で検索
+    const targetIndex = reversedArtworks.findIndex(
+      (a) => a.year.startsWith(year.toString())
+    );
+    if (targetIndex === -1) return;
+
+    const targetElement = cardRefs.current[targetIndex];
+
+    // cardRefが準備できていない場合はリトライ
+    if (!targetElement) {
+      if (retryCount < 5) {
+        setTimeout(() => scrollToYear(year, retryCount + 1), 100);
+      }
+      return;
+    }
+
+    // スクロール計算に必要な値
+    const maxScroll = scrollContent.scrollWidth - window.innerWidth;
+    const containerTop = container.offsetTop;
+    const containerHeight = container.offsetHeight;
+    const scrollStart = containerTop - window.innerHeight;
+    const scrollEnd = containerTop + containerHeight - window.innerHeight;
+    const scrollRange = scrollEnd - scrollStart;
+
+    // カードの位置を取得（getBoundingClientRectは変換後の位置を返すが、
+    // 親子関係にあるため差分を取ると自然な相対位置が得られる）
+    const scrollContentRect = scrollContent.getBoundingClientRect();
+    const targetRect = targetElement.getBoundingClientRect();
+
+    // scrollContent 座標系でのカードの相対位置
+    const cardLeftInContent = targetRect.left - scrollContentRect.left;
+    const cardCenterInContent = cardLeftInContent + targetRect.width / 2;
+
+    // カードを画面中央に配置するための targetProgress を計算
+    const targetProgress = Math.max(
+      0,
+      Math.min(1, (cardCenterInContent - window.innerWidth / 2) / maxScroll)
+    );
+
+    // progress から scrollY を計算
+    const targetScrollY = scrollStart + targetProgress * scrollRange;
+
+    // スクロール実行
+    isScrollingToYear.current = true;
+    window.scrollTo({ top: targetScrollY, behavior: "smooth" });
+
+    // スクロール完了後にフラグをリセット
+    setTimeout(() => {
+      isScrollingToYear.current = false;
+      // ハッシュをクリア（履歴を汚さない）
+      if (window.location.hash) {
+        window.history.replaceState(null, "", window.location.pathname);
+      }
+    }, 1000);
+  }, [reversedArtworks]);
+
+  // ハッシュ変更を監視してスクロール
+  useEffect(() => {
+    const handleHashChange = () => {
+      const hash = window.location.hash;
+      if (hash.startsWith("#year-")) {
+        const year = parseInt(hash.replace("#year-", ""), 10);
+        if (!isNaN(year)) {
+          // DOMの準備を待ってからスクロール
+          setTimeout(() => {
+            scrollToYear(year);
+          }, 100);
+        }
+      }
+    };
+
+    // 初回マウント時にハッシュをチェック
+    handleHashChange();
+
+    // hashchange イベントを監視
+    window.addEventListener("hashchange", handleHashChange);
+
+    return () => {
+      window.removeEventListener("hashchange", handleHashChange);
+    };
+  }, [scrollToYear]);
 
   useEffect(() => {
     const container = containerRef.current;
