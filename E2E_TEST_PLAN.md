@@ -123,18 +123,57 @@ expect(await tags.count()).toBe(artworkData[0].tags.length)
 ## 実行方法
 
 ```bash
-# 全テスト実行
+# 開発中（Chromiumのみ、高速）
+pnpm test:e2e:chromium
+
+# モバイル表示のテスト
+pnpm test:e2e:mobile
+
+# 全ブラウザテスト（CI/リリース前）
 pnpm test:e2e
 
-# 特定ファイルのみ
-pnpm test:e2e tests/e2e/home.spec.ts
-
-# UIモード
+# UIモード（テスト選択・実行状況の可視化）
 pnpm test:e2e:ui
 
 # デバッグモード
 pnpm test:e2e:debug
+
+# 特定ファイルのみ
+pnpm exec playwright test tests/e2e/home.spec.ts
 ```
+
+---
+
+## ブラウザ戦略
+
+### 対象ブラウザ
+
+| ブラウザ | エンジン | 用途 |
+|---------|----------|------|
+| Chromium | Blink | メインブラウザ、Chrome/Edge ユーザー |
+| Firefox | Gecko | 異なるエンジンでの互換性検証 |
+| Mobile Chrome | Blink | モバイルビューポート動作検証 |
+
+### 除外ブラウザ
+
+| ブラウザ | 理由 |
+|---------|------|
+| WebKit | Linux 環境での不安定性。Safari 検証は macOS/iOS 実機推奨 |
+| Mobile Safari | WebKit と同様。実機検証を推奨 |
+
+### 選定理由
+
+1. **Chromium + Firefox** で主要レンダリングエンジンをカバー
+2. Firefox は WebKit より安定し、CSS/JS の差異を効率的に検出
+3. 実行時間とカバレッジのバランスを重視（約1.5倍の実行時間増加）
+4. Safari の正確な検証には macOS/iOS 実機が必要（Linux WebKit ≠ 実際の Safari）
+
+### モバイルテストの注意点
+
+以下のテストはモバイル環境でスキップされる：
+- `window.open()` を使用するテスト（ポップアップブロッカーの影響）
+- `target="_blank"` リンクの新規タブ遷移テスト
+- ホバー依存のインタラクションテスト
 
 ---
 

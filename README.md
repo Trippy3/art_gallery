@@ -125,21 +125,60 @@ art_gallery/
 
 ## E2Eテスト
 
-### テストの実行
+### 初回セットアップ
 
 ```bash
-# E2Eテスト実行（ヘッドレスモード）
-pnpm test:e2e
+# ブラウザのインストール（初回のみ）
+pnpm exec playwright install chromium firefox
+```
 
-# UIモードでテスト実行
+### テストの実行
+
+**日常的に使用するコマンド:**
+
+```bash
+# 開発中の高速テスト（Chromiumのみ、推奨）
+pnpm test:e2e:chromium
+
+# モバイル表示のテスト
+pnpm test:e2e:mobile
+```
+
+**全ブラウザテスト（CI/リリース前）:**
+
+```bash
+# 全ブラウザでテスト実行（Chromium + Firefox + Mobile Chrome）
+pnpm test:e2e
+```
+
+**デバッグ・開発用:**
+
+```bash
+# UIモードでテスト実行（テスト選択・実行状況の可視化）
 pnpm test:e2e:ui
+
+# ブラウザを表示してテスト実行
+pnpm test:e2e:headed
+
+# デバッグモード（ステップ実行）
+pnpm test:e2e:debug
+
+# テストレポートの表示
+pnpm test:e2e:report
 
 # 特定のテストファイルを実行
 pnpm exec playwright test tests/e2e/home.spec.ts
-
-# デバッグモードで実行
-pnpm exec playwright test --debug
 ```
+
+### 対応ブラウザ
+
+| ブラウザ | 用途 |
+|---------|------|
+| Chromium | デスクトップ Chrome/Edge ユーザー向け |
+| Firefox | 異なるレンダリングエンジン（Gecko）での互換性検証 |
+| Mobile Chrome | モバイルビューポートでの動作検証 |
+
+> **Note**: WebKit（Safari）は Linux 環境での不安定性のため除外。Safari の正確な検証は macOS/iOS 実機で行うことを推奨。
 
 ### テストファイル
 
@@ -150,9 +189,12 @@ pnpm exec playwright test --debug
 | `artwork-detail.spec.ts` | 作品詳細ページ、ライトボックス |
 | `navigation.spec.ts` | ヘッダー、メニュー、年別スクロール |
 
-### テスト設定
+### テスト方針
 
-テスト設定は `playwright.config.ts` で管理されています。テストは開発サーバー（`http://localhost:3000`）に対して実行されます。
+詳細は [E2E_TEST_PLAN.md](./E2E_TEST_PLAN.md) を参照。
+
+- **UX/操作フローを検証する**（ページ遷移、メニュー開閉、スクロール動作）
+- **データ内容は検証しない**（特定のテキスト、要素数など）
 
 ## テーマのカスタマイズ
 

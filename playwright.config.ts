@@ -46,7 +46,17 @@ export default defineConfig({
     navigationTimeout: 30000,
   },
 
-  /* Configure projects for major browsers */
+  /* Configure projects for major browsers
+   *
+   * Browser selection rationale (B案):
+   * - chromium: Primary browser, most users
+   * - firefox: Different engine (Gecko), catches CSS/JS edge cases
+   * - mobile-chrome: Mobile viewport testing
+   *
+   * Excluded:
+   * - webkit: Unstable on Linux, real Safari testing should be on macOS
+   * - mobile-safari: Same as webkit, use real iOS for accurate testing
+   */
   projects: [
     {
       name: 'chromium',
@@ -58,30 +68,11 @@ export default defineConfig({
       use: { ...devices['Desktop Firefox'] },
     },
 
-    {
-      name: 'webkit',
-      use: { ...devices['Desktop Safari'] },
-    },
-
     /* Test against mobile viewports. */
     {
       name: 'mobile-chrome',
       use: { ...devices['Pixel 5'] },
     },
-    {
-      name: 'mobile-safari',
-      use: { ...devices['iPhone 13'] },
-    },
-
-    /* Test against branded browsers. */
-    // {
-    //   name: 'Microsoft Edge',
-    //   use: { ...devices['Desktop Edge'], channel: 'msedge' },
-    // },
-    // {
-    //   name: 'Google Chrome',
-    //   use: { ...devices['Desktop Chrome'], channel: 'chrome' },
-    // },
   ],
 
   /* Run your local dev server before starting the tests */

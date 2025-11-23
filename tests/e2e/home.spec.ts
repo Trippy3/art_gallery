@@ -61,11 +61,13 @@ test.describe('Home Page', () => {
       const scrollHint = page.locator(selectors.scrollHint)
       await expect(scrollHint).toBeVisible()
 
-      // Scroll down
-      await page.evaluate(() => window.scrollBy(0, 800))
-      await page.waitForTimeout(1500) // Wait for animation
+      // Scroll hint hides when scrollProgress >= 0.1 (10%)
+      // Need to scroll enough to reach 10% progress
+      // Scroll to middle of the page to ensure progress > 10%
+      await page.evaluate(() => window.scrollTo(0, 2000))
+      await page.waitForTimeout(1000) // Wait for state update
 
-      // Should be hidden
+      // Should be hidden (scrollProgress >= 0.1)
       await expect(scrollHint).not.toBeVisible()
     })
 
@@ -87,9 +89,10 @@ test.describe('Home Page', () => {
         return window.getComputedStyle(el).width
       })
 
-      // Scroll down
-      await page.evaluate(() => window.scrollBy(0, 1000))
-      await page.waitForTimeout(500)
+      // Scroll down significantly to ensure progress changes
+      // Mobile viewports may need more scroll to show visible progress
+      await page.evaluate(() => window.scrollTo(0, 2500))
+      await page.waitForTimeout(1000)
 
       // Get new width
       const newWidth = await progressIndicator.evaluate((el) => {
