@@ -77,7 +77,8 @@ export function HorizontalScrollGallery() {
     const maxScroll = scrollContent.scrollWidth - window.innerWidth;
     const containerTop = container.offsetTop;
     const containerHeight = container.offsetHeight;
-    const scrollStart = containerTop - window.innerHeight;
+    // scrollStartが負にならないようにして、ページトップでprogress=0を保証
+    const scrollStart = Math.max(0, containerTop - window.innerHeight);
     const scrollEnd = containerTop + containerHeight - window.innerHeight;
     const scrollRange = scrollEnd - scrollStart;
 
@@ -150,7 +151,8 @@ export function HorizontalScrollGallery() {
       const containerHeight = container.offsetHeight;
       const windowHeight = window.innerHeight;
 
-      const scrollStart = containerTop - windowHeight;
+      // scrollStartが負にならないようにして、ページトップでprogress=0を保証
+      const scrollStart = Math.max(0, containerTop - windowHeight);
       const scrollEnd = containerTop + containerHeight - windowHeight;
       const scrollRange = scrollEnd - scrollStart;
 
