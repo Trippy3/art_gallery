@@ -79,6 +79,17 @@ The main feature uses a scroll-jacking technique:
 - Artwork data is centralized in `lib/data/artworks.ts`
 - Supports both portrait and landscape artwork orientations with dynamic card sizing
 
+### Timeline Year Jump Navigation
+Header menu provides year-based navigation to jump to specific sections:
+- Uses URL hash (`#year-YYYY`) for navigation state
+- `window.location.hash` triggers native `hashchange` event on home page
+- `router.push()` handles navigation from other pages (e.g., About Me)
+- Gallery listens to `hashchange` events and calculates target scroll position
+- Uses `getBoundingClientRect()` to calculate card positions accounting for transforms
+- Scrolls to position that centers the first artwork of the selected year
+- Hash is cleared after scroll completes to avoid history pollution
+- Includes retry mechanism (up to 5 attempts) for refs not ready on mount
+
 ### Styling Approach
 - Tailwind utility classes for all styling
 - CSS variables for theme colors (defined in `globals.css`)
