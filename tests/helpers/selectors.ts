@@ -2,6 +2,8 @@ export const selectors = {
   // Header
   header: 'header',
   logo: 'header >> text=Aviary\'s Art Gallery',
+  logoImage: 'header >> img[alt="Aviary Logo"]',
+  logoLink: 'header >> a[href="/"]',
   menuButton: 'button[aria-label="メニュー"]',
   closeButton: 'button[aria-label="メニュー"]', // Same button, different icon
 

@@ -12,6 +12,7 @@
 - **About Me ページ**: アーティストプロフィール、制作理念、スキル紹介
 - **レスポンシブデザイン**: モバイル、タブレット、デスクトップ対応
 - **OGP対応**: SNSシェア時に最適な画像・タイトル・説明を表示
+- **ロゴ表示**: ヘッダーにロゴ画像とサイト名を表示、クリックでトップページへ遷移
 
 ## 技術スタック
 
@@ -58,9 +59,13 @@ pnpm lint
 ```
 art_gallery/
 ├── app/
-│   ├── layout.tsx              # ルートレイアウト
+│   ├── layout.tsx              # ルートレイアウト（metadataBase設定含む）
 │   ├── page.tsx                # メインページ
+│   ├── manifest.ts             # PWAマニフェスト設定
 │   ├── globals.css             # グローバルスタイル・CSS変数
+│   ├── favicon.ico             # ファビコン
+│   ├── icon.png                # アプリアイコン
+│   ├── apple-icon.png          # Apple タッチアイコン
 │   ├── about_me/
 │   │   └── page.tsx            # About Meページ
 │   └── artwork/
@@ -68,7 +73,7 @@ art_gallery/
 │           └── page.tsx        # 作品詳細ページ
 ├── components/
 │   ├── ui/                     # shadcn/ui コンポーネント
-│   ├── header.tsx              # ナビゲーションヘッダー
+│   ├── header.tsx              # ナビゲーションヘッダー（ロゴ表示）
 │   ├── hero.tsx                # ヒーローセクション
 │   ├── horizontal-scroll-gallery.tsx  # 横スクロールギャラリー
 │   ├── artwork-card.tsx        # 作品カード
@@ -78,7 +83,11 @@ art_gallery/
 │   ├── utils.ts                # ユーティリティ関数
 │   └── data/
 │       └── artworks.ts         # 作品データ
-├── public/                     # 静的アセット（画像）
+├── public/
+│   ├── aviary_logo_1.png       # サイトロゴ画像
+│   ├── icon-192.png            # PWAアイコン（192x192）
+│   ├── icon-512.png            # PWAアイコン（512x512）
+│   └── images/                 # 作品画像
 └── tests/
     ├── e2e/                    # E2Eテスト
     ├── fixtures/               # テストデータ

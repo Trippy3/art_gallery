@@ -16,6 +16,16 @@ test.describe('Navigation', () => {
       await expect(logo).toContainText('Aviary')
     })
 
+    test('should display logo image', async ({ page }) => {
+      const logoImage = page.locator(selectors.logoImage)
+      await expect(logoImage).toBeVisible()
+    })
+
+    test('should have alt text on logo image', async ({ page }) => {
+      const logoImage = page.locator(selectors.logoImage)
+      await expect(logoImage).toHaveAttribute('alt', 'Aviary Logo')
+    })
+
     test('should have fixed header position', async ({ page }) => {
       const header = page.locator(selectors.header)
       await expect(header).toBeVisible()

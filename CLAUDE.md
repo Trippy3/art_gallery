@@ -38,9 +38,13 @@ pnpm lint
 
 \`\`\`
 app/
-  ├── layout.tsx          # Root layout with theme provider
+  ├── layout.tsx          # Root layout with theme provider, metadataBase
   ├── page.tsx            # Main page composing all sections
-  └── globals.css         # Global styles and CSS variables
+  ├── manifest.ts         # PWA manifest configuration
+  ├── globals.css         # Global styles and CSS variables
+  ├── favicon.ico         # Favicon
+  ├── icon.png            # App icon (PNG)
+  └── apple-icon.png      # Apple touch icon
 
 components/
   ├── ui/                 # shadcn/ui components (auto-generated)
@@ -68,6 +72,14 @@ import { Component } from "@/components/component"
 - **Feature components**: `horizontal-scroll-gallery.tsx` - Complex interactive features
 - **UI components**: `components/ui/*` - Reusable shadcn/ui primitives
 - **Provider components**: `theme-provider.tsx` - Context providers
+
+### Header Component
+The header includes:
+- **Logo image**: `public/aviary_logo_1.png` displayed at 32x32px using Next.js Image component
+- **Site title**: "Aviary's Art Gallery"
+- Both logo and title are wrapped in a single Link, clickable for home navigation
+- Hamburger menu for navigation (year jump, About Me link)
+- Fixed position with backdrop blur effect
 
 ### Horizontal Scroll Gallery
 The main feature uses a scroll-jacking technique:

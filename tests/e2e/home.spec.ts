@@ -75,9 +75,9 @@ test.describe('Home Page', () => {
       const progressBar = page.locator('.bg-secondary.rounded-full')
       await expect(progressBar).toBeVisible()
 
-      // Check if progress indicator exists
+      // Check if progress indicator exists (initially width is 0%, so use toBeAttached)
       const progressIndicator = page.locator('.bg-accent.transition-all')
-      await expect(progressIndicator).toBeVisible()
+      await expect(progressIndicator).toBeAttached()
     })
 
     test('should update progress bar on scroll', async ({ page }) => {
