@@ -169,4 +169,17 @@ export const artworks: Artwork[] = [
     dimensions: "F8",
     orientation: "landscape",
   },
+  {
+    id: 13,
+    title: "西新宿",
+    year: "2026-02",
+    description: "西新宿の風景",
+    image: "/2026-02_P12.jpg",
+    tags: ["風景", "屋外"],
+    fullDescription:
+      "西新宿の風景をマルタンのような画風を意識して描きました。",
+    medium: "油彩／カンヴァス",
+    dimensions: "P12",
+    orientation: "portrait",
+  },
 ];
