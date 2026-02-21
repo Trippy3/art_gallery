@@ -10,6 +10,7 @@ export const selectors = {
   // Navigation Menu
   menuDropdown: 'nav',
   aboutLink: 'nav >> text=私について',
+  year2026Link: 'text=2026年',
   year2025Link: 'text=2025年',
   year2024Link: 'text=2024年',
   year2023Link: 'text=2023年',
