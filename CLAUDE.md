@@ -1,189 +1,152 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+Orientation for coding agents working in this repo. Read this first; deeper
+feature docs live in `README.md` and `E2E_TEST_PLAN.md`.
 
-## Project Overview
+This is a single-artist portfolio site ("Aviary's Art Gallery"): a Next.js 15
+App Router app whose signature feature is a **horizontal scroll-jacking
+timeline** of paintings. The UI is in Japanese.
 
-This is a Next.js 15 portfolio/art gallery application auto-synced with v0.app deployments. The project showcases artworks in a unique horizontal-scrolling timeline interface.
+---
 
-## Development Commands
+## WHY — premises that must not be casually overturned
 
-\`\`\`bash
-# Install dependencies (uses pnpm)
-pnpm install
+- **Auto-synced with v0.app.** v0.app pushes changes to this repo
+  automatically, so local edits to app code can be overwritten. Prefer small,
+  well-contained changes and assume the v0.app project is the other source of
+  truth. Confirm with the user before large local refactors.
+- **No backend, no database, no auth.** All content is static data compiled
+  into the bundle (`lib/data/artworks.ts`) plus images in `public/`. Don't
+  introduce a data layer to "fix" this — it's intentional.
+- **Build checks are deliberately disabled** (`next.config.mjs`):
+  `ignoreBuildErrors` (TS) and `ignoreDuringBuilds` (ESLint) are both on, and
+  images are `unoptimized`. This is v0.app's rapid-prototyping default. A green
+  `pnpm build` therefore proves *nothing* about type correctness — see HOW.
+- **Japanese UI text is intentional** (こんにちは, タイムライン, 私について…).
+  Preserve the language when editing copy.
 
-# Start development server (runs on http://localhost:3000)
-pnpm dev
+---
 
-# Build for production
-pnpm build
+## WHAT — repository structure
 
-# Start production server
-pnpm start
-
-# Run linting
-pnpm lint
-\`\`\`
-
-## Technology Stack
-
-- **Framework**: Next.js 15.2.4 with App Router
-- **React**: v19
-- **TypeScript**: v5 with strict mode enabled
-- **Styling**: Tailwind CSS v4 with CSS variables
-- **UI Components**: shadcn/ui (New York style) with Radix UI primitives
-- **Package Manager**: pnpm
-
-## Project Structure
-
-\`\`\`
+```
 app/
-  ├── layout.tsx          # Root layout with theme provider, metadataBase
-  ├── page.tsx            # Main page composing all sections
-  ├── manifest.ts         # PWA manifest configuration
-  ├── globals.css         # Global styles and CSS variables
-  ├── favicon.ico         # Favicon
-  ├── icon.png            # App icon (PNG)
-  └── apple-icon.png      # Apple touch icon
-
+  layout.tsx              # Root layout; sets metadataBase (OGP base URL)
+  page.tsx                # Home; exports OGP metadata using the latest artwork
+  artwork/[id]/page.tsx   # Per-artwork detail + generateMetadata (async params)
+  artwork/[id]/artwork-detail-client.tsx  # Client UI incl. image lightbox
+  about_me/page.tsx       # Static "私について" page
+  manifest.ts             # PWA manifest
+  globals.css             # Theme CSS variables (:root / .dark)
 components/
-  ├── ui/                 # shadcn/ui components (auto-generated)
-  ├── header.tsx          # Navigation header
-  ├── hero.tsx            # Hero section with Japanese text
-  ├── horizontal-scroll-gallery.tsx  # Main gallery feature
-  ├── artwork-card.tsx    # Individual artwork display
-  ├── footer.tsx          # Footer component
-  └── theme-provider.tsx  # Dark/light theme wrapper
-
-lib/                      # Utility functions (e.g., cn helper)
-public/                   # Static assets (images)
-\`\`\`
-
-## Architecture Patterns
-
-### Path Aliases
-The project uses `@/` alias for all imports, configured in `tsconfig.json`:
-\`\`\`typescript
-import { Component } from "@/components/component"
-\`\`\`
-
-### Component Organization
-- **Layout components**: `header.tsx`, `footer.tsx` - Static UI elements
-- **Feature components**: `horizontal-scroll-gallery.tsx` - Complex interactive features
-- **UI components**: `components/ui/*` - Reusable shadcn/ui primitives
-- **Provider components**: `theme-provider.tsx` - Context providers
-
-### Header Component
-The header includes:
-- **Logo image**: `public/aviary_logo_1.png` displayed at 32x32px using Next.js Image component
-- **Site title**: "Aviary's Art Gallery"
-- Both logo and title are wrapped in a single Link, clickable for home navigation
-- Hamburger menu for navigation (year jump, About Me link)
-- Fixed position with backdrop blur effect
-
-### Horizontal Scroll Gallery
-The main feature uses a scroll-jacking technique:
-- Converts vertical scroll into horizontal translation
-- Uses `position: sticky` container with absolute positioned content
-- Calculates scroll progress based on viewport position
-- Applies `translateX` transform for horizontal movement
-- Timeline visualization with year markers (YYYY-MM format)
-- Artwork data is centralized in `lib/data/artworks.ts`
-- Supports both portrait and landscape artwork orientations with dynamic card sizing
-
-### Timeline Year Jump Navigation
-Header menu provides year-based navigation to jump to specific sections:
-- Uses URL hash (`#year-YYYY`) for navigation state
-- `window.location.hash` triggers native `hashchange` event on home page
-- `router.push()` handles navigation from other pages (e.g., About Me)
-- Gallery listens to `hashchange` events and calculates target scroll position
-- Uses `getBoundingClientRect()` to calculate card positions accounting for transforms
-- Scrolls to position that centers the first artwork of the selected year
-- Hash is cleared after scroll completes to avoid history pollution
-- Includes retry mechanism (up to 5 attempts) for refs not ready on mount
-
-### Styling Approach
-- Tailwind utility classes for all styling
-- CSS variables for theme colors (defined in `globals.css`)
-- `next-themes` for dark/light mode support
-- `cn()` utility from `lib/utils` for conditional classes
-
-### shadcn/ui Integration
-- Configuration in `components.json`
-- Components use "new-york" style variant
-- RSC-compatible components
-- Lucide React for icons (ArrowLeft, X, ZoomIn, ExternalLink, etc.)
-- UI components should not be manually edited (regenerate with `npx shadcn@latest add`)
-
-### Artwork Orientation Support
-The application supports both portrait and landscape artwork displays:
-- **Portrait artworks**: 3:4 aspect ratio, smaller width (280-400px on cards, aspect-[3/4] on detail pages)
-- **Landscape artworks**: 4:3 aspect ratio, wider dimensions (400-600px on cards, aspect-[4/3] on detail pages)
-- Orientation is manually set in the artwork data (`orientation: "portrait" | "landscape"`)
-- Both gallery cards and detail pages adapt dynamically to artwork orientation
-- Card sizes: Portrait (280×400 to 400×550px), Landscape (400×300 to 600×450px)
-
-### Image Lightbox Feature
-Detail pages include a lightbox modal for viewing full-resolution images:
-- Click on the artwork image or the zoom icon (bottom-right corner) to open lightbox
-- Lightbox displays image with preserved aspect ratio using `object-contain`
-- Background: black/80 with backdrop blur for focus
-- Close methods: ESC key, background click, or X button in top-right
-- Body scroll is prevented when lightbox is open
-- Mobile-friendly with zoom icon always visible (no hover-only UI)
-- High-quality image rendering (quality={100})
-
-## Important Notes
-
-### Build Configuration
-`next.config.mjs` has relaxed checks:
-- `ignoreDuringBuilds: true` for ESLint
-- `ignoreBuildErrors: true` for TypeScript
-- `unoptimized: true` for images
-
-This is v0.app's default setup for rapid prototyping.
-
-### v0.app Sync
-This repository auto-syncs with v0.app. Changes made on v0.app are pushed here automatically. Local changes should be carefully considered as they may be overwritten.
-
-### Content Language
-The UI includes Japanese text (こんにちは, タイムライン, etc.). Preserve language choices when modifying content.
-
-### Adding Artworks
-To add artworks, edit the `artworks` array in `lib/data/artworks.ts`. Each artwork requires:
-- `id`: Unique number
-- `title`: Artwork name (Japanese)
-- `year`: Display year in YYYY-MM format (e.g., "2024-03")
-- `description`: Brief description (Japanese)
-- `image`: Path to image in `/public`
-- `tags`: Array of tag strings (Japanese)
-- `fullDescription`: Detailed description for detail page (Japanese)
-- `medium`: Medium/technique (e.g., "油彩／カンヴァス")
-- `dimensions`: Dimensions (e.g., "F6", "M12", "P15")
-- `orientation`: Either "portrait" (縦長) or "landscape" (横長) - manually set based on artwork aspect ratio
-
-### Theme Customization
-Theme colors are defined using CSS variables in `app/globals.css`. Modify the `:root` and `.dark` selectors to change the color scheme.
-
-### OGP (Open Graph Protocol) Configuration
-Dynamic OGP metadata is configured for social media sharing:
-
-**Files involved**:
-- `app/layout.tsx`: Sets `metadataBase` for absolute URL resolution
-- `app/page.tsx`: Exports `metadata` with latest artwork image for home page
-- `app/artwork/[id]/page.tsx`: Uses `generateMetadata()` for dynamic per-artwork OGP
-
-**OGP image behavior**:
-- Home page: Automatically uses the most recent artwork (sorted by `year` descending)
-- Artwork detail pages: Uses the specific artwork's image
-
-**Base URL resolution** (in `layout.tsx`):
-```typescript
-const baseUrl = process.env.VERCEL_URL
-  ? `https://${process.env.VERCEL_URL}`
-  : process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+  horizontal-scroll-gallery.tsx  # THE core feature (scroll-jacking) — fragile
+  header.tsx              # Nav; year-jump menu is HARDCODED (see pitfalls)
+  artwork-card.tsx        # Card; adapts to portrait/landscape orientation
+  hero.tsx footer.tsx theme-provider.tsx
+  ui/                     # shadcn/ui (new-york) — generated, do not hand-edit
+lib/
+  data/artworks.ts        # Single source of all artwork content + Artwork type
+  utils.ts                # cn() helper
+tests/e2e/                # Playwright specs (home, navigation, detail, about)
+public/                   # Images, named by date e.g. /2024-03_F6.jpg
 ```
 
-**Environment variables**:
-- `VERCEL_URL`: Auto-set by Vercel (preferred)
-- `NEXT_PUBLIC_BASE_URL`: For custom domain deployments
+**Core domain type:** `Artwork` in `lib/data/artworks.ts`. The `artworks` array
+is the only content store; everything (gallery, detail pages, OGP) reads from it.
+
+Imports use the `@/` path alias (configured in `tsconfig.json`).
+
+---
+
+## HOW — run and verify
+
+### Local run (pnpm only)
+
+```bash
+pnpm install
+pnpm dev        # http://localhost:3000
+```
+
+### Verification
+
+| Command | What it checks | Notes |
+|---|---|---|
+| `pnpm exec tsc --noEmit` | Real type errors | **Use this** — `pnpm build` swallows them |
+| `pnpm test:e2e` | Behavior (Playwright) | Auto-starts `pnpm dev`; required before commit |
+| `pnpm lint` | ESLint | Advisory; build ignores it |
+| `pnpm build` | Production build | Green ≠ correct (errors ignored) |
+
+E2E projects: `test:e2e:chromium`, `:firefox`, `:mobile`. Use `:ui` /
+`:headed` / `:debug` for local debugging, `:report` to view the last run.
+
+### Manual verification
+
+The scroll-jacking gallery (`horizontal-scroll-gallery.tsx`) cannot be fully
+trusted to unit checks. After touching it, manually scroll the home page and
+test the header year-jump menu in a browser.
+
+---
+
+## Pitfalls specific to this project
+
+1. **The year-jump menu is hardcoded.** `header.tsx` has one `<button>` per
+   year (2022–2026). Adding an artwork from a *new* year does **not** create a
+   nav entry — you must add the button manually. Keep buttons newest-first.
+
+2. **`artworks` is stored oldest-first; the gallery reverses it.** The array in
+   `lib/data/artworks.ts` is chronological (2022 → 2026). The gallery renders
+   `[...artworks].reverse()` to show newest-first. Append new artworks at the
+   end in date order; don't re-sort the source array.
+
+3. **`year` must be lexically sortable `YYYY-MM`.** Home-page OGP picks the
+   "latest" artwork via `b.year.localeCompare(a.year)`, and year-jump matches
+   with `year.startsWith("2026")`. Always zero-pad the month (`"2024-03"`).
+
+4. **`id` is the URL.** `/artwork/[id]` does `Number.parseInt(id)` and
+   `notFound()` if unmatched. Each `id` must be a unique number; don't reuse or
+   renumber existing ones (breaks shared links and OGP).
+
+5. **The scroll-jacking math is fragile.** It maps vertical scroll → `translateX`
+   using `getBoundingClientRect()` *after* transforms, a `position: sticky`
+   container, and a retry loop (up to 5×) for refs not ready on mount. Small
+   changes to layout/padding (`paddingLeft/Right: 100vw`, gaps, card sizes) can
+   silently break centering and year-jump. Verify manually + via E2E.
+
+6. **shadcn/ui components are generated.** Don't hand-edit `components/ui/*`;
+   re-add with `npx shadcn@latest add`.
+
+7. **`Artwork.orientation` is set by hand.** `"portrait"` (3:4) vs
+   `"landscape"` (4:3) drives card and detail-page sizing. There's no
+   auto-detection from the image — pick the right one when adding artwork.
+
+8. **OGP base URL comes from env.** `layout.tsx` resolves `VERCEL_URL` →
+   `NEXT_PUBLIC_BASE_URL` → `http://localhost:3000`. Set
+   `NEXT_PUBLIC_BASE_URL` for custom-domain deploys or social previews break.
+
+---
+
+## Adding an artwork (the common task)
+
+1. Add an object to the `artworks` array in `lib/data/artworks.ts`, in date
+   order, with all fields of `Artwork` (`id`, `title`, `year` as `YYYY-MM`,
+   `description`, `image`, `tags`, `fullDescription`, `medium`, `dimensions`,
+   `orientation`). Content fields are Japanese.
+2. Put the image in `public/` (filename convention: `/YYYY-MM_<size>.jpg`).
+3. If it's a **new year**, add a year button to the menu in `header.tsx`
+   (pitfall #1).
+4. Verify: `pnpm exec tsc --noEmit` then `pnpm test:e2e`.
+
+---
+
+## Project-specific style
+
+- Styling is Tailwind v4 utility classes + CSS variables in `globals.css`;
+  use `cn()` from `lib/utils` for conditional classes. Theme via `next-themes`.
+- Most interactive components are client components (`"use client"`); the
+  artwork detail route splits a server `page.tsx` (metadata) from a client
+  `artwork-detail-client.tsx` (lightbox, interactivity). Follow that split.
+
+## Reference
+
+- `README.md` — fuller feature/setup docs
+- `E2E_TEST_PLAN.md` — test coverage plan
