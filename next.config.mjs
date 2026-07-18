@@ -1,7 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  eslint: {
-    ignoreDuringBuilds: true,
+  turbopack: {
+    // Pin the workspace root: stray lockfiles in parent directories otherwise
+    // make Turbopack misinfer it (breaks asset serving in dev).
+    root: import.meta.dirname,
   },
   typescript: {
     ignoreBuildErrors: true,
