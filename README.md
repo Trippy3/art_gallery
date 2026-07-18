@@ -20,7 +20,7 @@ https://aviary-gallery.vercel.app/
 
 | カテゴリ | 技術 |
 |---------|------|
-| フレームワーク | Next.js 15.2.4 (App Router) |
+| フレームワーク | Next.js 16.2 (App Router / Turbopack) |
 | React | v19 |
 | 言語 | TypeScript v5 (strict mode) |
 | スタイリング | Tailwind CSS v4 |
@@ -34,7 +34,7 @@ https://aviary-gallery.vercel.app/
 
 ### 必要条件
 
-- Node.js 18.x 以上
+- Node.js 20.9 以上（Next.js 16 の必要条件）
 - pnpm
 
 ### インストール
@@ -227,16 +227,18 @@ import { artworks } from "@/lib/data/artworks"
 
 ## 注意事項
 
-### v0.app同期
+### v0.app同期（終了）
 
-このリポジトリは[v0.app](https://v0.app)と自動同期されています。v0.app上での変更は自動的にこのリポジトリにプッシュされます。ローカルでの変更は上書きされる可能性があるため注意してください。
+このリポジトリは元々[v0.app](https://v0.app)と自動同期されていましたが、現在はv0.app側での編集は行っておらず、このリポジトリが唯一のソースです。
 
 ### ビルド設定
 
-`next.config.mjs` では以下の設定が有効になっています（v0.appのデフォルト）：
-- ESLint: ビルド時のエラーを無視
-- TypeScript: ビルドエラーを無視
+`next.config.mjs` では以下の設定が有効になっています：
+- TypeScript: ビルドエラーを無視（型チェックは `pnpm exec tsc --noEmit` で実施）
 - Images: 最適化を無効化
+- `turbopack.root`: ワークスペースルートを固定（親ディレクトリのlockfileによる誤推定防止）
+
+リントはビルドとは独立しています（Next.js 16 で `next lint` が廃止されたため、`pnpm lint` は ESLint CLI + `eslint.config.mjs` のflat configで実行）。
 
 ### コンテンツの言語
 

@@ -3,25 +3,31 @@
 Orientation for coding agents working in this repo. Read this first; deeper
 feature docs live in `README.md` and `E2E_TEST_PLAN.md`.
 
-This is a single-artist portfolio site ("Aviary's Art Gallery"): a Next.js 15
-App Router app whose signature feature is a **horizontal scroll-jacking
-timeline** of paintings. The UI is in Japanese.
+This is a single-artist portfolio site ("Aviary's Art Gallery"): a Next.js 16
+App Router app (Turbopack) whose signature feature is a **horizontal
+scroll-jacking timeline** of paintings. The UI is in Japanese.
 
 ---
 
 ## WHY — premises that must not be casually overturned
 
-- **Auto-synced with v0.app.** v0.app pushes changes to this repo
-  automatically, so local edits to app code can be overwritten. Prefer small,
-  well-contained changes and assume the v0.app project is the other source of
-  truth. Confirm with the user before large local refactors.
+- **v0.app sync is over.** This repo started as a v0.app project but is no
+  longer edited there (as of 2026-07); this repository is the single source of
+  truth. Leftover v0 conventions (see build checks below) still apply until
+  deliberately changed.
 - **No backend, no database, no auth.** All content is static data compiled
   into the bundle (`lib/data/artworks.ts`) plus images in `public/`. Don't
   introduce a data layer to "fix" this — it's intentional.
-- **Build checks are deliberately disabled** (`next.config.mjs`):
-  `ignoreBuildErrors` (TS) and `ignoreDuringBuilds` (ESLint) are both on, and
-  images are `unoptimized`. This is v0.app's rapid-prototyping default. A green
-  `pnpm build` therefore proves *nothing* about type correctness — see HOW.
+- **TS build checks are deliberately disabled** (`next.config.mjs`):
+  `ignoreBuildErrors` is on and images are `unoptimized` (v0 rapid-prototyping
+  defaults). A green `pnpm build` therefore proves *nothing* about type
+  correctness — see HOW. ESLint is fully decoupled from the build: Next 16
+  removed `next lint`, so `pnpm lint` runs `eslint .` with the flat config in
+  `eslint.config.mjs`.
+- **ESLint 10 and TypeScript 7 are deliberately held back.** Both break the
+  lint toolchain: eslint-plugin-react (pinned by eslint-config-next) still
+  uses APIs removed in ESLint 10, and typescript-eslint only supports
+  `typescript <6.1.0`. Don't bump them until those upstreams catch up.
 - **Japanese UI text is intentional** (こんにちは, タイムライン, 私について…).
   Preserve the language when editing copy.
 
@@ -44,6 +50,7 @@ components/
   artwork-card.tsx        # Card; adapts to portrait/landscape orientation
   hero.tsx footer.tsx theme-provider.tsx
   ui/                     # shadcn/ui (new-york) — generated, do not hand-edit
+                          #   (only button + card; unused ones were removed)
 lib/
   data/artworks.ts        # Single source of all artwork content + Artwork type
   utils.ts                # cn() helper
@@ -73,7 +80,7 @@ pnpm dev        # http://localhost:3000
 |---|---|---|
 | `pnpm exec tsc --noEmit` | Real type errors | **Use this** — `pnpm build` swallows them |
 | `pnpm test:e2e` | Behavior (Playwright) | Auto-starts `pnpm dev`; required before commit |
-| `pnpm lint` | ESLint | Advisory; build ignores it |
+| `pnpm lint` | ESLint (`eslint .`, flat config in `eslint.config.mjs`) | Advisory; not part of the build |
 | `pnpm build` | Production build | Green ≠ correct (errors ignored) |
 
 E2E projects: `test:e2e:chromium`, `:firefox`, `:mobile`. Use `:ui` /
@@ -122,6 +129,21 @@ test the header year-jump menu in a browser.
 8. **OGP base URL comes from env.** `layout.tsx` resolves `VERCEL_URL` →
    `NEXT_PUBLIC_BASE_URL` → `http://localhost:3000`. Set
    `NEXT_PUBLIC_BASE_URL` for custom-domain deploys or social previews break.
+
+9. **Same-URL `<Link>` clicks don't scroll in Next 16.** Clicking the header
+   logo while on the home page must return to the top; Next 16 keeps the
+   scroll position on same-URL navigations, so `header.tsx` handles this with
+   an explicit `onClick` → `window.scrollTo(0, 0)`. Don't remove it.
+
+10. **The gallery intentionally violates react-hooks v6 rules.**
+    `react-hooks/refs` and `react-hooks/immutability` are downgraded to
+    warnings for `horizontal-scroll-gallery.tsx` only (see
+    `eslint.config.mjs`): the scroll-jacking math reads/writes refs during
+    render on purpose. Don't "fix" the warnings casually — see pitfall 5.
+
+11. **`turbopack.root` is pinned in `next.config.mjs`.** Parent directories
+    contain stray lockfiles that make Turbopack misinfer the workspace root
+    (breaking asset serving in dev). Keep the setting.
 
 ---
 
