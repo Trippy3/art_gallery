@@ -182,4 +182,16 @@ export const artworks: Artwork[] = [
     dimensions: "P12",
     orientation: "portrait",
   },
+  {
+    id: 14,
+    title: "夜のパティオ",
+    year: "2026-07",
+    description: "いつかの西新宿",
+    image: "/2026-07_F12.jpg",
+    tags: ["風景", "夜景"],
+    fullDescription: "マルタンのような画風を夜景に応用できないかと思い挑戦してみましたが、夜景に合った光や色を表現するのが難しく反省点が残ります。",
+    medium: "油彩／カンヴァス",
+    dimensions: "F12",
+    orientation: "portrait",
+  },
 ];
