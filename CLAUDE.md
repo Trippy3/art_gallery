@@ -72,7 +72,12 @@ Imports use the `@/` path alias (configured in `tsconfig.json`).
 ```bash
 pnpm install
 pnpm dev        # http://localhost:3000
+ALLOWED_DEV_ORIGINS=192.168.0.9 pnpm dev   # also allow a LAN host (phone testing)
 ```
+
+Next 16 blocks dev resources for non-localhost origins, so opening the dev
+server via a LAN IP without `ALLOWED_DEV_ORIGINS` never hydrates — the gallery
+looks frozen on the scroll hint. Production builds are unaffected.
 
 ### Verification
 

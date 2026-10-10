@@ -203,6 +203,61 @@ test.describe('Home Page', () => {
       expect(count).toBeGreaterThanOrEqual(1)
     })
 
+    for (const viewport of [
+      { name: 'desktop', width: 1280, height: 720 },
+      { name: 'mobile', width: 390, height: 844 },
+    ]) {
+      test(`should limit info overlay to the bottom of the card (${viewport.name})`, async ({ page }) => {
+        await page.setViewportSize({ width: viewport.width, height: viewport.height })
+        await page.evaluate(() => window.scrollTo(0, 1000))
+        await page.waitForTimeout(1000)
+
+        const overlay = page.locator('[data-testid="artwork-card-overlay"].opacity-100').first()
+        await expect(overlay).toBeVisible()
+
+        // The overlay is positioned inside the image container (its parent)
+        const imageArea = overlay.locator('..')
+        const overlayBox = await overlay.boundingBox()
+        const imageBox = await imageArea.boundingBox()
+        expect(overlayBox).not.toBeNull()
+        expect(imageBox).not.toBeNull()
+
+        // Overlay stays within the bottom ~2/5 so the artwork itself is not washed out.
+        // Checked for every card (portrait and landscape); offsetHeight ignores the scale transform.
+        const maxRatio = await page.evaluate(() =>
+          Math.max(
+            ...[...document.querySelectorAll<HTMLElement>('[data-testid="artwork-card-overlay"]')].map(
+              (el) => el.offsetHeight / (el.parentElement as HTMLElement).offsetHeight,
+            ),
+          ),
+        )
+        expect(maxRatio).toBeLessThanOrEqual(0.4)
+        // ...and is anchored to the image's bottom edge
+        expect(Math.abs(overlayBox!.y + overlayBox!.height - (imageBox!.y + imageBox!.height))).toBeLessThanOrEqual(2)
+
+        // Minimum info remains: title and detail link
+        await expect(overlay.locator('h3')).toBeVisible()
+        await expect(overlay.locator(selectors.viewDetailsButton)).toBeVisible()
+      })
+    }
+
+    test('should show the focused card fully opaque on mobile (no fade-in haze)', async ({ page }) => {
+      await page.setViewportSize({ width: 390, height: 844 })
+
+      // Early in the gallery the scroll-based fade-in has not finished yet on small screens
+      for (const y of [600, 1000]) {
+        await page.evaluate((top) => window.scrollTo(0, top), y)
+        // Wait for the 500ms opacity transition to settle
+        await page.waitForTimeout(800)
+
+        const overlay = page.locator('[data-testid="artwork-card-overlay"].opacity-100').first()
+        await expect(overlay).toBeVisible()
+        const card = page.locator('.group.cursor-pointer').filter({ has: overlay })
+        const opacity = await card.evaluate((el) => Number(getComputedStyle(el).opacity))
+        expect(opacity).toBe(1)
+      }
+    })
+
     test('should navigate to artwork detail page on card click', async ({ page, context, isMobile }) => {
       // Skip on mobile as window.open() may be blocked by popup blocker
       test.skip(isMobile, 'Card click navigation uses window.open which is unreliable on mobile')

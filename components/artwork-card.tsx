@@ -53,7 +53,10 @@ export function ArtworkCard({
     <Card
       className={`relative flex-shrink-0 ${sizeClasses} overflow-hidden group cursor-pointer transition-all duration-500`}
       style={{
-        opacity: cardProgress,
+        // The focused card is always fully opaque: on small screens the
+        // scroll-based fade-in is not finished when the first cards reach
+        // the center, which would leave a whitish haze over the artwork.
+        opacity: isFocused ? 1 : cardProgress,
         transform: `scale(${0.8 + cardProgress * 0.2})`,
       }}
       onMouseEnter={() => setIsHovered(true)}
@@ -69,40 +72,25 @@ export function ArtworkCard({
           className="object-cover transition-transform duration-700 group-hover:scale-110"
         />
 
-        {/* Overlay - shown when focused or hovered */}
+        {/* Info overlay - shown when focused or hovered.
+            Confined to the bottom of the card (content-sized, ~2/5 at most)
+            so the artwork itself stays clearly visible, especially on mobile.
+            Tags and the full description live on the detail page. */}
         <div
-          className={`absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent transition-opacity duration-500 ${
-            showContent ? "opacity-100" : "opacity-0"
-          }`}
-        />
-
-        {/* Content - slides up when focused or hovered */}
-        <div
-          className={`absolute bottom-0 left-0 right-0 p-6 transition-all duration-500 ${
+          data-testid="artwork-card-overlay"
+          className={`absolute bottom-0 left-0 right-0 px-4 pt-5 pb-3 sm:px-5 sm:pt-8 sm:pb-4 bg-gradient-to-t from-background via-background/80 to-transparent transition-all duration-500 ${
             showContent ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
           }`}
         >
           {/* Title */}
-          <h3 className="text-xl sm:text-2xl font-medium text-foreground mb-2 text-balance">
+          <h3 className="text-base sm:text-xl font-medium text-foreground mb-2 md:mb-1 truncate">
             {artwork.title}
           </h3>
 
-          {/* Description */}
-          <p className="text-sm text-muted-foreground mb-4 leading-relaxed">
+          {/* Description - one line, md+ only to keep the overlay short */}
+          <p className="hidden md:block text-sm text-muted-foreground mb-2 truncate">
             {artwork.description}
           </p>
-
-          {/* Tags */}
-          <div className="flex flex-wrap gap-2 mb-4">
-            {artwork.tags.map((tag) => (
-              <span
-                key={tag}
-                className="text-xs px-2 py-1 bg-secondary text-secondary-foreground rounded"
-              >
-                {tag}
-              </span>
-            ))}
-          </div>
 
           {/* View Details button - opens in new tab */}
           <Link
@@ -111,9 +99,9 @@ export function ArtworkCard({
             rel="noopener noreferrer"
             onClick={(e) => e.stopPropagation()} // Prevent card click when button is clicked
           >
-            <Button variant="outline" size="sm">
+            <Button variant="outline" size="sm" className="h-7 text-xs sm:h-8 sm:text-sm">
               詳細を見る
-              <ExternalLink className="ml-2 h-4 w-4" />
+              <ExternalLink className="size-3.5 sm:ml-2 sm:size-4" />
             </Button>
           </Link>
         </div>
