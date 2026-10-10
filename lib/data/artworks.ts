@@ -194,4 +194,17 @@ export const artworks: Artwork[] = [
     dimensions: "F12",
     orientation: "portrait",
   },
+  {
+    id: 15,
+    title: "模写『ドーヴィル』",
+    year: "2026-09",
+    description: "ウジェーヌ・ブーダン作の模写",
+    image: "/2026-09_M10.jpg",
+    tags: ["模写", "風景", "空"],
+    fullDescription:
+      "ブーダンの空や海に挑戦してみたく模写してみました。単純な色のようで、よく見ると複雑に色が絡み合っている部分が難しくもあり面白かったです。",
+    medium: "油彩／カンヴァス",
+    dimensions: "M10",
+    orientation: "landscape",
+  },
 ];
