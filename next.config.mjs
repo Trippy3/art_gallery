@@ -8,6 +8,9 @@ const nextConfig = {
     .split(",")
     .map((host) => host.trim())
     .filter(Boolean),
+  experimental: {
+    agentUpgrade: "security",
+  },
   turbopack: {
     // Pin the workspace root: stray lockfiles in parent directories otherwise
     // make Turbopack misinfer it (breaks asset serving in dev).
