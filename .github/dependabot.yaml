@@ -1,0 +1,21 @@
+# Dependabot configuration for the pnpm-managed dependencies in this repository.
+#
+# Version updates wait briefly after publication so compromised or broken
+# releases have time to be detected and withdrawn. Dependabot security updates
+# are not subject to cooldown and therefore remain prompt.
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    cooldown:
+      default-days: 7
+      semver-major-days: 30
+      semver-minor-days: 7
+      semver-patch-days: 5
+    groups:
+      npm-minor-patch:
+        applies-to: "version-updates"
+        update-types: ["minor", "patch"]

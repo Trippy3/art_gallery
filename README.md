@@ -34,14 +34,26 @@ https://aviary-gallery.vercel.app/
 
 ### 必要条件
 
-- Node.js 20.9 以上（Next.js 16 の必要条件）
-- pnpm
+- Node.js 24.22.1 以上、25 未満
+- pnpm 10.18.2 以上、11 未満
+
+Node.js 24.22.1 には、2026 年 10 月に漏えいした eMudhra（emSign）の
+中間 CA 公開鍵を拒否する対策と、更新済みの CA ストアが含まれます。
+`.nvmrc` は Node.js 24 系の最新パッチを選び、`package.json` と `.npmrc` は
+対策前のバージョンで依存関係をインストールしないよう制限します。
 
 ### インストール
 
 ```bash
+# nvm を使う場合（Node.js 24 系の最新パッチを使用）
+nvm install
+nvm use
+
+# package.json で指定した pnpm を有効化
+corepack enable
+
 # 依存関係のインストール
-pnpm install
+pnpm install --frozen-lockfile
 
 # 開発サーバーの起動 (http://localhost:3000)
 pnpm dev
