@@ -24,10 +24,12 @@ scroll-jacking timeline** of paintings. The UI is in Japanese.
   correctness — see HOW. ESLint is fully decoupled from the build: Next 16
   removed `next lint`, so `pnpm lint` runs `eslint .` with the flat config in
   `eslint.config.mjs`.
-- **ESLint 10 and TypeScript 7 are deliberately held back.** Both break the
-  lint toolchain: eslint-plugin-react (pinned by eslint-config-next) still
-  uses APIs removed in ESLint 10, and typescript-eslint only supports
-  `typescript <6.1.0`. Don't bump them until those upstreams catch up.
+- **ESLint 10 and TypeScript 7 are deliberately held back.** TypeScript is
+  pinned to 6.0.3 as the bridge release for the eventual TypeScript 7 move.
+  eslint-plugin-react (pinned by eslint-config-next) still excludes ESLint 10,
+  and typescript-eslint only supports `typescript <6.1.0`. Don't bump either
+  major until those upstreams catch up; validate TypeScript 7 against the
+  project-local CLI and editor plugin before removing this holdback.
 - **Japanese UI text is intentional** (こんにちは, タイムライン, 私について…).
   Preserve the language when editing copy.
 
