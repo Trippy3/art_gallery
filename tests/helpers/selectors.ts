@@ -8,8 +8,9 @@ export const selectors = {
   closeButton: 'button[aria-label="メニュー"]', // Same button, different icon
 
   // Navigation Menu
-  menuDropdown: 'nav',
-  aboutLink: 'nav >> text=私について',
+  // Scoped to header: the Next.js dev overlay injects its own <nav>
+  menuDropdown: 'header nav',
+  aboutLink: 'header nav >> text=私について',
   year2026Link: 'text=2026年',
   year2025Link: 'text=2025年',
   year2024Link: 'text=2024年',
