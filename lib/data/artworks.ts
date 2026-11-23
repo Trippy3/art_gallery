@@ -207,4 +207,17 @@ export const artworks: Artwork[] = [
     dimensions: "M10",
     orientation: "landscape",
   },
+  {
+    id: 16,
+    title: "模写『干潮』",
+    year: "2026-11",
+    description: "ウジェーヌ・ブーダン作の模写",
+    image: "/2026-11_P12.jpg",
+    tags: ["模写", "風景", "空"],
+    fullDescription:
+      "前作に続いてブーダンの模写です。夕焼けの空の質感を練習するため模写してみました。何気ない雲の筆致を真似することがとても難しかったです。",
+    medium: "油彩／カンヴァス",
+    dimensions: "P12",
+    orientation: "landscape",
+  },
 ];
